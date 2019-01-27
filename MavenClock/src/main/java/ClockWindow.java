@@ -95,7 +95,7 @@ public class ClockWindow extends JFrame {
 		setContentPane(timeDisplayPanel);
 		timeDisplayPanel.setLayout(new BoxLayout(timeDisplayPanel, BoxLayout.X_AXIS));
 		
-		//Knappar som ändrar tidsformatet som visas
+		//Knappar som ändrar tidsformatet som visas.
 		
 		JButton btnNewButton_1 = new JButton("AM/FM");
 		btnNewButton_1.addActionListener(new ActionListener() {
