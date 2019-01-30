@@ -19,14 +19,16 @@ import javax.swing.JButton;
 import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JSlider;
+import javax.swing.JScrollBar;
 
 public class ClockWindow extends JFrame {
 	String dateFormatEdit;
 	GregorianCalendar calendarObjekt;
 	int count = 0;
-	private Alarm alarm = new Alarm(2019, 0, 29, 18, 10);
+	private Alarm alarm = new Alarm(2019, 0, 30, 14, 55);
 	private JPanel timeDisplayPanel;
-	private DateFormat formatDateObject = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
 	
 	@Override
 	public Font getFont() {
@@ -49,10 +51,12 @@ public class ClockWindow extends JFrame {
 				
 				while (true) {
 					calendarObjekt = new GregorianCalendar();
-					//currentTime används för att jämföra med den satta alarmtiden
-					String currentTime = formatDateObject.format(calendarObjekt.getTime());
-					compareToAlarmTime(currentTime);
+
 					
+					if (alarm.isEqualTo(calendarObjekt)) {
+						alarm.triggerAlarm();
+					}
+					 
 					if (count == 0) {
 						dateFormatEdit = formatFMAM(calendarObjekt);
 					}
@@ -158,13 +162,4 @@ public class ClockWindow extends JFrame {
 		// Bokstäver till stora bokstäver
 		return dateFormatted.toUpperCase();
 	}
-	
-	//jämför om den nuvarande tiden är samma som alarmet
-	private void compareToAlarmTime(String currentTime) {
-		if (currentTime.equals(alarm.getAlarmTime())) {
-			//utlöser alarm om det är samma tid
-			alarm.triggerAlarm();
-		}
 	}
-	
-}

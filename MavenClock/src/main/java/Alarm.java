@@ -14,13 +14,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-
+			
 public class Alarm {
 	private boolean isOn;
 	//denna alarmtid ska sättas av användaren
 	private Calendar alarmTime;
 	//formaterar alarmtiden till enhetlig output som string
-	private DateFormat alarmFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	//Konstruerar alarmet och sätter alarmtiden
 	public Alarm(int year, int month, int date, int hour, int minute) {
@@ -34,7 +34,23 @@ public class Alarm {
 	@SuppressWarnings("restriction")
 	private AudioPlayer alarmSoundPlayer = null;
 	File soundFile = new File("src/main/resources/Soundfiles/Alien_AlarmDrum-KevanGC-893953959.wav");
-	///MavenClock/src/main/resources/Soundfiles/sms-alert-5-daniel_simon.wav
+	
+	
+	
+	public boolean isEqualTo(Calendar compare) {
+		
+		String inputString = dateFormater.format(compare.getTime()); 
+		String alarmString = dateFormater.format(alarmTime.getTime());
+		
+		if(inputString.equals(alarmString)) {
+			return true; 
+		} else {
+			return false; 
+		}
+		
+			
+			
+	}
 	
 	public void triggerAlarm() {
 		
@@ -65,7 +81,7 @@ public class Alarm {
 	}
 	
 	public String getAlarmTime() {
-		String alarmTimeString = alarmFormatter.format(alarmTime.getTime());
+		String alarmTimeString = dateFormater.format(alarmTime.getTime());
 		return alarmTimeString;
 	}
 	
