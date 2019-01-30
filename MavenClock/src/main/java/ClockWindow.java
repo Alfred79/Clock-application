@@ -69,7 +69,7 @@ public class ClockWindow extends JFrame {
 					//String dateFormatEdit = dateString.substring(11, 19);
 					System.out.println(dateFormatEdit);
 					try {
-						this.sleep(500);//pausa 0.5 sek
+						this.sleep(500);//pausa  uppdatering av tid 0.5 sek
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -77,7 +77,6 @@ public class ClockWindow extends JFrame {
 				}
 			}
 		}.start();
-		
 	}
 	
 	//skapar och sätter inställningar för grafiska objekt till fönstret
@@ -90,7 +89,6 @@ public class ClockWindow extends JFrame {
 		timeDisplayPanel.setLayout(new BoxLayout(timeDisplayPanel, BoxLayout.X_AXIS));
 		
 		//Knappar som ändrar tidsformatet som visas.
-		
 		JButton btnNewButton_1 = new JButton("AM/FM");
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
