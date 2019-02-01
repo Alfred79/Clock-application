@@ -1,42 +1,32 @@
-
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
 import java.awt.Color;
-import javax.swing.BoxLayout;
 import javax.swing.JTextPane;
-import java.awt.Component;
 import java.awt.Font;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.JButton;
-import javax.swing.SwingConstants;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JSlider;
-import javax.swing.JScrollBar;
+import javax.swing.JComboBox;
 
 public class ClockWindow extends JFrame {
 	String dateFormatEdit;
 	GregorianCalendar calendarObjekt;
 	int count = 0;
-	private Alarm alarm = new Alarm(2019, 0, 30, 14, 55);
+	private Alarm alarm = new Alarm(2019, 01, 01, 9, 54);
 	private JPanel timeDisplayPanel;
-	
+	private JPanel alarmDisplayPanel;
 	
 	@Override
 	public Font getFont() {
-		// TODO Auto-generated method stub
 		return super.getFont();
 	}
 	
 	private JTextPane timeDisplayText;
+	private JTextPane alarmDisplayText;
 	
 	//Konstruera klockfönstret
 	public ClockWindow() {
@@ -51,12 +41,11 @@ public class ClockWindow extends JFrame {
 				
 				while (true) {
 					calendarObjekt = new GregorianCalendar();
-
 					
 					if (alarm.isEqualTo(calendarObjekt)) {
 						alarm.triggerAlarm();
 					}
-					 
+					
 					if (count == 0) {
 						dateFormatEdit = formatFMAM(calendarObjekt);
 					}
@@ -85,22 +74,11 @@ public class ClockWindow extends JFrame {
 	
 	//skapar och sätter inställningar för grafiska objekt till fönstret
 	private void initComponents() {
-		setSize(900, 600);
+		setSize(1300, 600);
 		timeDisplayPanel = new JPanel();
 		timeDisplayPanel.setBackground(new Color(245, 245, 220));
 		timeDisplayPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(timeDisplayPanel);
-		timeDisplayPanel.setLayout(new BoxLayout(timeDisplayPanel, BoxLayout.X_AXIS));
-		
-		//Knappar som ändrar tidsformatet som visas.
-		JButton btnNewButton_1 = new JButton("AM/FM");
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				dateFormatEdit = formatFMAM(calendarObjekt);
-			}
-		});
-		
-		timeDisplayPanel.add(btnNewButton_1);
 		
 		JButton btnNewButton = new JButton("24h");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -109,28 +87,90 @@ public class ClockWindow extends JFrame {
 			}
 		});
 		
+		//Knappar som ändrar tidsformatet som visas.
+		JButton btnNewButton_1 = new JButton("AM/FM");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dateFormatEdit = formatFMAM(calendarObjekt);
+			}
+		});
+		//		
+		timeDisplayPanel.add(btnNewButton_1, "2, 2, left, center");
+		
 		JButton btnNewButton_2 = new JButton("Date");
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dateFormatEdit = formatDate(calendarObjekt);
 			}
 		});
+		timeDisplayPanel.add(btnNewButton_2, "3, 2, left, center");
+		timeDisplayPanel.add(btnNewButton, "4, 2, left, center");
 		
-		timeDisplayPanel.add(btnNewButton_2);
-		timeDisplayPanel.add(btnNewButton);
 		timeDisplayText = new JTextPane();
 		timeDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 99));
 		timeDisplayText.setBackground(new Color(255, 255, 255));
 		timeDisplayText.setBorder(null);
-		timeDisplayText.setOpaque(false); //transparent bakgrund 
-		timeDisplayPanel.add(timeDisplayText);
+		timeDisplayText.setOpaque(false);
+		timeDisplayPanel.add(timeDisplayText, "8, 2, center, center");
+		
+		//Panel för larmvisning+funktioner
+		alarmDisplayPanel = new JPanel();
+		alarmDisplayPanel.setBackground(new Color(245, 245, 220));
+		alarmDisplayPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+		//vektorer med valbara minuter och timmar för larm
+		String[] hours = { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15",
+				"16", "17", "18", "19", "20", "21", "22", "23", "24" };
+		String[] minutes = { "00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55" };
+		//dropdowns visar timmar och minuter
+		JComboBox dropDownHours = new JComboBox(hours);
+		JComboBox dropDownMinutes = new JComboBox(minutes);
+		dropDownHours.setMaximumRowCount(12);
+		dropDownMinutes.setMaximumRowCount(12);
+		alarmDisplayPanel.add(dropDownHours);
+		alarmDisplayPanel.add(dropDownMinutes);
+		
+		JButton btnAlarmOn = new JButton("Alarm ON");
+		btnAlarmOn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//vid knapptryck hämtas aktuell år, månad,datum
+				int year = calendarObjekt.get(Calendar.YEAR);
+				int month = calendarObjekt.get(Calendar.MONTH);
+				int day = calendarObjekt.get(Calendar.DATE);
+				//tid + minute läses in från användarens val
+				int hour = Integer.parseInt(dropDownHours.getSelectedItem().toString());
+				int minute = Integer.parseInt(dropDownMinutes.getSelectedItem().toString());
+				
+				alarm.setAlarmTime(year, month, day, hour, minute);
+				alarmDisplayText.setText(alarm.getAlarmTime());
+			}
+		});
+		
+		alarmDisplayPanel.add(btnAlarmOn);
+		
+		JButton btnAlarmOff = new JButton("Alarm OFF");
+		
+		alarmDisplayPanel.add(btnAlarmOff);
+		alarmDisplayText = new JTextPane();
+		alarmDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 99));
+		alarmDisplayText.setBackground(new Color(255, 255, 255));
+		alarmDisplayText.setBorder(null);
+		alarmDisplayText.setOpaque(false);
+		alarmDisplayText.setText("no alarm is set");
+		alarmDisplayPanel.add(alarmDisplayText);
+		timeDisplayPanel.add(alarmDisplayPanel, "8, 2, center, center");
+		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
 	}
 	
-	//Lägger till tiden till visningsfönstret
+	//Lägger till tiden till fönstret
 	public void showTime(String time) {
 		timeDisplayText.setText(time);
+	}
+	
+	//visar alarmtiden i fönstret
+	public void showAlarmTime(String alarmTime) {
+		alarmDisplayText.setText(alarmTime);
 	}
 	
 	// Formaterar tiden - formatmall kan hittas här:
@@ -162,4 +202,4 @@ public class ClockWindow extends JFrame {
 		// Bokstäver till stora bokstäver
 		return dateFormatted.toUpperCase();
 	}
-	}
+}
