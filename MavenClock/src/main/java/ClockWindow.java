@@ -12,12 +12,15 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
+import javax.swing.JToggleButton;
+import javax.swing.JCheckBox;
 
 public class ClockWindow extends JFrame {
+	
 	String dateFormatEdit;
 	GregorianCalendar calendarObjekt;
 	int count = 0;
-	private Alarm alarm = new Alarm(2019, 01, 01, 9, 54);
+	private Alarm alarm = new Alarm();
 	private JPanel timeDisplayPanel;
 	private JPanel alarmDisplayPanel;
 	
@@ -43,9 +46,11 @@ public class ClockWindow extends JFrame {
 				while (true) {
 					calendarObjekt = new GregorianCalendar();
 					
-					if (alarm.isEqualTo(calendarObjekt)) {
+					//kickar igång alarmet om alarmet är på och tiden är lika med aktuell tidpunkt
+					if (alarm.alarmIsOn() && alarm.isEqualTo(calendarObjekt)) {
 						alarm.triggerAlarm();
 					}
+					
 					
 					if (count == 0) {
 						dateFormatEdit = formatFMAM(calendarObjekt);
@@ -130,35 +135,41 @@ public class ClockWindow extends JFrame {
 		alarmDisplayPanel.add(dropDownHours);
 		alarmDisplayPanel.add(dropDownMinutes);
 		
-		JButton btnAlarmOn = new JButton("Alarm ON");
-		btnAlarmOn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				//vid knapptryck hämtas aktuell år, månad,datum
-				int year = calendarObjekt.get(Calendar.YEAR);
-				int month = calendarObjekt.get(Calendar.MONTH);
-				int day = calendarObjekt.get(Calendar.DATE);
-				//tid + minute läses in från användarens val
-				int hour = Integer.parseInt(dropDownHours.getSelectedItem().toString());
-				int minute = Integer.parseInt(dropDownMinutes.getSelectedItem().toString());
-				
-				alarm.setAlarmTime(year, month, day, hour, minute);
-				alarmDisplayText.setText(alarm.getAlarmTime());
-			}
+		JCheckBox alarmTickBox = new JCheckBox("Alarm on");
+		
+		alarmTickBox.addActionListener(new ActionListener() {
+		    @Override
+		    public void actionPerformed(ActionEvent event) {
+		    
+		        if (alarmTickBox.isSelected()) {
+		        	//vid ikryssad box hämtas aktuell år, månad,datum
+					int year = calendarObjekt.get(Calendar.YEAR);
+					int month = calendarObjekt.get(Calendar.MONTH);
+					int day = calendarObjekt.get(Calendar.DATE);
+					//tid + minute läses in från användarens val
+					int hour = Integer.parseInt(dropDownHours.getSelectedItem().toString());
+					int minute = Integer.parseInt(dropDownMinutes.getSelectedItem().toString());
+					alarm.setAlarmTime(year, month, day, hour, minute);
+					alarm.setAlarmOn(true);
+					updateAlarmDisplayText();
+		        } else if (!alarmTickBox.isSelected()){
+		        	alarm.setAlarmOn(false);
+					updateAlarmDisplayText(); 
+		            
+		        }
+		    }
 		});
 		
-		alarmDisplayPanel.add(btnAlarmOn);
 		
-		JButton btnAlarmOff = new JButton("Alarm OFF");
-		
-		alarmDisplayPanel.add(btnAlarmOff);
+		alarmDisplayPanel.add(alarmTickBox);
 		alarmDisplayText = new JTextPane();
 		alarmDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 99));
 		alarmDisplayText.setBackground(new Color(255, 255, 255));
 		alarmDisplayText.setBorder(null);
 		alarmDisplayText.setOpaque(false);
-		alarmDisplayText.setText("no alarm is set");
 		alarmDisplayPanel.add(alarmDisplayText);
 		timeDisplayPanel.add(alarmDisplayPanel, "8, 2, center, center");
+		
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
@@ -202,6 +213,14 @@ public class ClockWindow extends JFrame {
 		
 		// Bokstäver till stora bokstäver
 		return dateFormatted.toUpperCase();
+	}
+	
+	private void updateAlarmDisplayText() {
+	if (alarm.alarmIsOn()==true) {
+		alarmDisplayText.setText(alarm.getAlarmTime());
+	}	else {
+		alarmDisplayText.setText("alarm off"); 
+	}
 	}
 }
 
