@@ -19,6 +19,7 @@ public class Alarm {
 	
 	//denna alarmtid ska sättas av användaren
 	private Calendar alarmTime;
+	private boolean alarmOn; 
 	//formaterar alarmtiden till enhetlig output som string
 	private DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
@@ -46,11 +47,13 @@ public class Alarm {
 	
 	//lägger till valbara ljud till listan
 		private void compileSoundFiles() {
-			File Alien_AlarmDrum = new File("src/main/resources/Soundfiles/Alien_AlarmDrum-KevanGC-893953959.wav");
-			File Alert = new File("src/main/resources/Soundfiles/sms-alert-5-daniel_simon.wav.wav");
-			soundFiles.add(Alien_AlarmDrum); 
-			soundFiles.add(Alert); 
-			//Default ljudinställning 
+			File alarmDrum = new File("src/main/resources/Soundfiles/Alien_AlarmDrum-KevanGC-893953959.wav");
+			File alert = new File("src/main/resources/Soundfiles/sms-alert-5-daniel_simon.wav.wav");
+			File buzzer = new File("src/main/resources/Soundfiles/Loud_Alarm_Clock_Buzzer-Muk1984-493547174.wav");
+			soundFiles.add(alarmDrum); 
+			soundFiles.add(alert);
+			soundFiles.add(buzzer);
+			//Default ljudinställning
 			defaultAlarmSoundFile = soundFiles.get(0);	
 			}
 		
@@ -59,7 +62,7 @@ public class Alarm {
 		defaultAlarmSoundFile = soundFiles.get(soundFileIndex);
 		}
 		
-	//kollar om alarmtiden är samma tidpunkt som ett annnat kalenderobjekt
+	//jämför om alarmtiden är samma tidpunkt som ett annnat kalenderobjekt
 	public boolean isEqualTo(Calendar compare) {
 		
 		String inputString = dateFormater.format(compare.getTime());
@@ -100,4 +103,14 @@ public class Alarm {
 		alarmTime = new GregorianCalendar(year, month, date, hour, minute, 0);
 		//0=jan, 1=feb , osv
 	}
+
+	public boolean alarmIsOn() {
+		return alarmOn;
+	}
+
+	public void setAlarmOn(boolean alarmOn) {
+		this.alarmOn = alarmOn;
+	}
+	
+	
 }
