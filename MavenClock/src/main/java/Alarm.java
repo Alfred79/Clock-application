@@ -2,8 +2,11 @@
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.List;
+
 import javax.swing.JOptionPane;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
@@ -19,24 +22,43 @@ public class Alarm {
 	//formaterar alarmtiden till enhetlig output som string
 	private DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
+	//Objekt för att läsa in och spela upp alarmljudet
+		private InputStream soundFileInputStream;
+		@SuppressWarnings("restriction")
+		private AudioStream audioStream;
+		@SuppressWarnings("restriction")
+		private AudioPlayer alarmSoundPlayer = null;
+		
+	private List<File> soundFiles = new ArrayList<File>();
+	private File defaultAlarmSoundFile; 
+	
+	
 	//Konstruerar alarmet
 	public Alarm() {
-		
+		compileSoundFiles();	
 	}
 	
 	//Konstruerar alarmet och sätter alarmtiden
 	public Alarm(int year, int month, int date, int hour, int minute) {
+		compileSoundFiles();
 		this.setAlarmTime(year, month, date, hour, minute);
 	}
 	
-	//Objekt för att läsa in och spela upp alarmljudet
-	private InputStream soundFileInputStream;
-	@SuppressWarnings("restriction")
-	private AudioStream audioStream;
-	@SuppressWarnings("restriction")
-	private AudioPlayer alarmSoundPlayer = null;
-	File soundFile = new File("src/main/resources/Soundfiles/Alien_AlarmDrum-KevanGC-893953959.wav");
-	
+	//lägger till valbara ljud till listan
+		private void compileSoundFiles() {
+			File Alien_AlarmDrum = new File("src/main/resources/Soundfiles/Alien_AlarmDrum-KevanGC-893953959.wav");
+			File Alert = new File("src/main/resources/Soundfiles/sms-alert-5-daniel_simon.wav.wav");
+			soundFiles.add(Alien_AlarmDrum); 
+			soundFiles.add(Alert); 
+			//Default ljudinställning 
+			defaultAlarmSoundFile = soundFiles.get(0);	
+			}
+		
+		//Ändra vald ljudfil. 
+		private void changeDefaultSoundFile(int soundFileIndex) {
+		defaultAlarmSoundFile = soundFiles.get(soundFileIndex);
+		}
+		
 	//kollar om alarmtiden är samma tidpunkt som ett annnat kalenderobjekt
 	public boolean isEqualTo(Calendar compare) {
 		
@@ -51,17 +73,18 @@ public class Alarm {
 		
 	}
 	
+	
+	
 	public void triggerAlarm() {
 		new Thread() {
 			public void run() {
 				try {
-					soundFileInputStream = new FileInputStream(soundFile);
+					soundFileInputStream = new FileInputStream(defaultAlarmSoundFile);
 					audioStream = new AudioStream(soundFileInputStream);
 					alarmSoundPlayer.player.start(audioStream);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				} catch (Exception e) {
-					
 				}
 			}
 		}.start();

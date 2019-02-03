@@ -1,7 +1,6 @@
 
 import java.awt.EventQueue;
 
-
 public class ClockMain {
 	public static void main(String[] args) {
 		
