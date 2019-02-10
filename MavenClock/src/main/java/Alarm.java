@@ -33,6 +33,9 @@ public class Alarm {
 	private List<File> soundFiles = new ArrayList<File>();
 	private File defaultAlarmSoundFile; 
 	
+	public int getSoundFilesCount() {
+		return soundFiles.size();
+	}
 	
 	//Konstruerar alarmet
 	public Alarm() {
@@ -58,7 +61,7 @@ public class Alarm {
 			}
 		
 		//Ändra vald ljudfil. 
-		private void changeDefaultSoundFile(int soundFileIndex) {
+		public void changeDefaultSoundFile(int soundFileIndex) {
 		defaultAlarmSoundFile = soundFiles.get(soundFileIndex);
 		}
 		

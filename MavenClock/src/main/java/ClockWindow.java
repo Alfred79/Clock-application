@@ -44,7 +44,7 @@ public class ClockWindow extends JFrame {
 			public void run() {
 				
 				while (true) {
-					calendarObjekt = new GregorianCalendar();
+					calendarObjekt = (GregorianCalendar) GregorianCalendar.getInstance();
 					
 					//kickar igång alarmet om alarmet är på och tiden är lika med aktuell tidpunkt
 					if (alarm.alarmIsOn() && alarm.isEqualTo(calendarObjekt)) {
@@ -66,13 +66,13 @@ public class ClockWindow extends JFrame {
 					}
 					
 					//String dateFormatEdit = dateString.substring(11, 19);
-					System.out.println(dateFormatEdit);
+					System.out.println(calendarObjekt.getTime());
 					try {
 						this.sleep(500);//pausa  uppdatering av tid 0.5 sek
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					showTime(dateFormatEdit); //Uppdatera textfältet som visar tiden
+					showTime(calendarObjekt.getTime().toString()); //Uppdatera textfältet som visar tiden
 				}
 			}
 		}.start();
@@ -127,13 +127,18 @@ public class ClockWindow extends JFrame {
 		String[] hours = { "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15",
 				"16", "17", "18", "19", "20", "21", "22", "23", "24" };
 		String[] minutes = { "00", "05", "10", "15", "20", "25", "30", "35", "40", "45", "50", "55" };
+		String[] alarmSound = {"1", "2", "3"}; 
+		
 		//dropdowns visar timmar och minuter
 		JComboBox dropDownHours = new JComboBox(hours);
 		JComboBox dropDownMinutes = new JComboBox(minutes);
+		JComboBox dropDownAlarm = new JComboBox(alarmSound);
 		dropDownHours.setMaximumRowCount(12);
 		dropDownMinutes.setMaximumRowCount(12);
+		dropDownAlarm.setMaximumRowCount(alarm.getSoundFilesCount());
 		alarmDisplayPanel.add(dropDownHours);
 		alarmDisplayPanel.add(dropDownMinutes);
+		alarmDisplayPanel.add(dropDownAlarm);
 		
 		JCheckBox alarmTickBox = new JCheckBox("Alarm on");
 		
@@ -149,7 +154,9 @@ public class ClockWindow extends JFrame {
 					//tid + minute läses in från användarens val
 					int hour = Integer.parseInt(dropDownHours.getSelectedItem().toString());
 					int minute = Integer.parseInt(dropDownMinutes.getSelectedItem().toString());
+					int alarmSound = Integer.parseInt(dropDownAlarm.getSelectedItem().toString());
 					alarm.setAlarmTime(year, month, day, hour, minute);
+					alarm.changeDefaultSoundFile(alarmSound);
 					alarm.setAlarmOn(true);
 					updateAlarmDisplayText();
 		        } else if (!alarmTickBox.isSelected()){
