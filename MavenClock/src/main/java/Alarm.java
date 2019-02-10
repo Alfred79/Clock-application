@@ -30,7 +30,7 @@ public class Alarm {
 		@SuppressWarnings("restriction")
 		private AudioPlayer alarmSoundPlayer = null;
 		
-	private List<File> soundFiles = new ArrayList<File>();
+	private ArrayList<File> soundFiles = new ArrayList<File>();
 	private File defaultAlarmSoundFile; 
 	
 	
@@ -57,10 +57,7 @@ public class Alarm {
 			defaultAlarmSoundFile = soundFiles.get(0);	
 			}
 		
-		//Ändra vald ljudfil. 
-		private void changeDefaultSoundFile(int soundFileIndex) {
-		defaultAlarmSoundFile = soundFiles.get(soundFileIndex);
-		}
+		
 		
 	//jämför om alarmtiden är samma tidpunkt som ett annnat kalenderobjekt
 	public boolean isEqualTo(Calendar compare) {
@@ -85,6 +82,7 @@ public class Alarm {
 					soundFileInputStream = new FileInputStream(defaultAlarmSoundFile);
 					audioStream = new AudioStream(soundFileInputStream);
 					alarmSoundPlayer.player.start(audioStream);
+					System.out.println("alarm triggered");
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				} catch (Exception e) {
@@ -93,7 +91,12 @@ public class Alarm {
 		}.start();
 		
 	}
-	
+		//Ändra vald ljudfil. 
+			private void changeDefaultSoundFile(int soundFileIndex) {
+			defaultAlarmSoundFile = soundFiles.get(soundFileIndex);
+			}
+			
+			
 	public String getAlarmTime() {
 		String alarmTimeString = dateFormater.format(alarmTime.getTime());
 		return alarmTimeString;
@@ -112,5 +115,7 @@ public class Alarm {
 		this.alarmOn = alarmOn;
 	}
 	
-	
+	public ArrayList<File> getSoundFiles() {
+		return soundFiles;
+	}
 }
