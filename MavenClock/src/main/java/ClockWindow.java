@@ -13,19 +13,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
-import javax.swing.JButton;
 
 public class ClockWindow extends JFrame {
-	
-	// Variabler knutna till CompactMode
-	int mainWidth = 700;
-	int mainHeight = 1000;
-	int fontSizeHeader = 24;
-	int btnW = 117;
-	int btnH = 29;
-	int headX = 259;
-	int headY = 60;
-	
 	
 	String presentTime;
 	String presentDate;
@@ -161,7 +150,7 @@ private void increaseAvailibleYearsInMenu() {
 		//skapar och sätter inställningar för grafiska objekt till fönstret
 		private void initComponents() {
 			currentTimeObject = new GregorianCalendar();
-			setSize(mainWidth, mainHeight);
+			setSize(700, 1000);
 			timeDisplayPanel = new JPanel();
 			timeDisplayPanel.setBackground(Color.WHITE);
 			timeDisplayPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -262,9 +251,9 @@ private void increaseAvailibleYearsInMenu() {
 			// Rubrik
 			
 			JTextPane txtpnThealarmclock = new JTextPane();
-			txtpnThealarmclock.setFont(new Font("Lucida Grande", Font.BOLD, fontSizeHeader));
+			txtpnThealarmclock.setFont(new Font("Lucida Grande", Font.BOLD, 24));
 			txtpnThealarmclock.setText("TheAlarmClock");
-			txtpnThealarmclock.setBounds(headX, headY, 192, 48);
+			txtpnThealarmclock.setBounds(259, 60, 192, 48);
 			timeDisplayPanel.add(txtpnThealarmclock);
 			
 			// Alarmrubrik
@@ -300,28 +289,6 @@ private void increaseAvailibleYearsInMenu() {
 				lblHourMinute.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 				lblHourMinute.setBounds(399, 475, 139, 16);
 				timeDisplayPanel.add(lblHourMinute);
-				
-				// Ställer om komponenternas position och storlek för en kompakt view
-				
-				JButton btnCompactView = new JButton("Compact View");
-				btnCompactView.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						mainHeight= 300;
-						mainWidth= 200;
-						fontSizeHeader = 12;
-						btnH=0;
-						btnW=0;
-						headX = 35;
-						headY= 61;
-						initComponents();
-						
-						
-					}
-				});
-				
-				
-				btnCompactView.setBounds(35, 61, btnW, btnH);
-				timeDisplayPanel.add(btnCompactView);
 				
 				alarmTickBox.addActionListener(new ActionListener() {
 				    @Override
@@ -449,4 +416,6 @@ private void increaseAvailibleYearsInMenu() {
 			return monthNum;
 		
 		}
+}
+
 }
