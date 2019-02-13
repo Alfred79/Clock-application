@@ -228,7 +228,7 @@ private void increaseAvailibleYearsInMenu() {
 			alarmTickBox.addActionListener(new ActionListener() {
 			    @Override
 			    public void actionPerformed(ActionEvent event) {
-			    
+			    //ett nytt alarm sätts med de valda inställningarna i menyn om användaren fyller i tickbox
 			        if (alarmTickBox.isSelected()) {
 			        	int alarmYear = Integer.parseInt(dropDownYears.getSelectedItem().toString());
 			        	int alarmMonth = getMonthNumber(dropDownMonths.getSelectedItem().toString());
