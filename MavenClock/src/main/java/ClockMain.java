@@ -9,7 +9,7 @@ public class ClockMain {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ClockWindowMerge frame = new ClockWindowMerge();
+					ClockWindow frame = new ClockWindow();
 					} catch (Exception e) {
 					e.printStackTrace();
 				}

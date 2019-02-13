@@ -1,5 +1,5 @@
-
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import java.awt.Color;
@@ -16,8 +16,12 @@ import javax.swing.JCheckBox;
 
 public class ClockWindow extends JFrame {
 	
+	String presentTime;
+	String presentDate;
 	private String dateFormatEdit;
 	private GregorianCalendar currentTimeObject;
+	private GregorianCalendar currentDateObject;
+	
 	private int count = 0;
 	private Alarm alarm = new Alarm();
 	private JPanel timeDisplayPanel;
@@ -25,6 +29,8 @@ public class ClockWindow extends JFrame {
 	
 	private JTextPane timeDisplayText;
 	private JTextPane alarmDisplayText;
+	private JTextPane dateDisplayText;
+	
 	private JComboBox<String> dropDownHours;
 	private JComboBox<String> dropDownMinutes;
 	private JComboBox<String> dropDownYears;
@@ -144,119 +150,167 @@ private void increaseAvailibleYearsInMenu() {
 		//skapar och sätter inställningar för grafiska objekt till fönstret
 		private void initComponents() {
 			currentTimeObject = new GregorianCalendar();
-			setSize(1300, 600);
+			setSize(700, 1000);
 			timeDisplayPanel = new JPanel();
-			timeDisplayPanel.setBackground(new Color(245, 245, 220));
+			timeDisplayPanel.setBackground(Color.WHITE);
 			timeDisplayPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 			setContentPane(timeDisplayPanel);
+			
+			
+			timeDisplayPanel.setLayout(null);
+			//		
+			
 			timeDisplayText = new JTextPane();
-			timeDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 99));
+			timeDisplayText.setBounds(224, 170, 245, 120);
+			timeDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 60));
 			timeDisplayText.setBackground(new Color(255, 255, 255));
 			timeDisplayText.setBorder(null);
 			timeDisplayText.setOpaque(false);
-			timeDisplayText.setEditable(false);
-			timeDisplayPanel.add(timeDisplayText, "8, 2, center, center");
+			timeDisplayPanel.add(timeDisplayText);
+			
+			dateDisplayText = new JTextPane();
+			dateDisplayText.setText("");
+			dateDisplayText.setBounds(259, 290, 178, 55);
+			dateDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 25));
+			dateDisplayText.setBackground(new Color(255, 255, 255));
+			dateDisplayText.setBorder(null);
+			dateDisplayText.setOpaque(false);
+			timeDisplayPanel.add(dateDisplayText);
+			
+			
 			
 			//Panel för larmvisning+funktioner
 			alarmDisplayPanel = new JPanel();
-			alarmDisplayPanel.setBackground(new Color(245, 245, 220));
+			alarmDisplayPanel.setBounds(219, 645, 268, 39);
+			alarmDisplayPanel.setBackground(Color.WHITE);
 			alarmDisplayPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-			
-			//dropdowns visar timmar och minuter
-			dropDownHours = new JComboBox<String>();
-			dropDownMinutes = new JComboBox<String>();
 			dropDownYears = new JComboBox<String>();
-			dropDownMonths = new JComboBox<String>();
-			dropDownDays = new JComboBox<String>();
-		dropDownYears.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//Om användaren byter år i menyn ska dagarna för den valda månaden och året uppdateras till det valda året 
-				if (alarmMenuDisplaysCurrentDate) {
-					
-					int year = Integer.parseInt(dropDownYears.getSelectedItem().toString());
-		        	int month = getMonthNumber(dropDownMonths.getSelectedItem().toString());
-		        	int date = Integer.parseInt(dropDownDays.getSelectedItem().toString());
-					int hour = Integer.parseInt(dropDownHours.getSelectedItem().toString());
-					int minute = Integer.parseInt(dropDownMinutes.getSelectedItem().toString());
-					updateDropDownDays( new GregorianCalendar(year, month, date, hour, minute, 0));
-					
-					// menyn avancerar 5 år när användaren väljer ett annat år än nuvarande
-					increaseAvailibleYearsInMenu();
+			dropDownYears.setBounds(181, 515, 52, 27);
+			timeDisplayPanel.add(dropDownYears);
+			dropDownYears.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					//Om användaren byter år i menyn ska dagarna för den valda månaden och året uppdateras till det valda året 
+					if (alarmMenuDisplaysCurrentDate) {
+						
+						int year = Integer.parseInt(dropDownYears.getSelectedItem().toString());
+			        	int month = getMonthNumber(dropDownMonths.getSelectedItem().toString());
+			        	int date = Integer.parseInt(dropDownDays.getSelectedItem().toString());
+						int hour = Integer.parseInt(dropDownHours.getSelectedItem().toString());
+						int minute = Integer.parseInt(dropDownMinutes.getSelectedItem().toString());
+						updateDropDownDays( new GregorianCalendar(year, month, date, hour, minute, 0));
+						
+						// menyn avancerar 5 år när användaren väljer ett annat år än nuvarande
+						increaseAvailibleYearsInMenu();
+						}
 					}
-				}
-		});
-		
-		dropDownMonths.addActionListener(new ActionListener() {
-			//Om användaren byter månad i menyn ska dagar uppdateras för den valda månaden och året 
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (alarmMenuDisplaysCurrentDate) {
-					int year = Integer.parseInt(dropDownYears.getSelectedItem().toString());
-		        	int month = getMonthNumber(dropDownMonths.getSelectedItem().toString());
-		        	int date = Integer.parseInt(dropDownDays.getSelectedItem().toString());
-					int hour = Integer.parseInt(dropDownHours.getSelectedItem().toString());
-					int minute = Integer.parseInt(dropDownMinutes.getSelectedItem().toString());
-					updateDropDownDays( new GregorianCalendar(year, month, date, hour, minute, 0));
-				}
-			}
-			
-		});
-		
-		
-			
-			dropDownHours.setToolTipText("Select hour");
-			dropDownMinutes.setToolTipText("Select Minute");
-			dropDownHours.setMaximumRowCount(12);
-			dropDownMinutes.setMaximumRowCount(12);
+			});
 			dropDownYears.setToolTipText("Select year");
 			dropDownYears.setMaximumRowCount(12);
-			dropDownMonths.setMaximumRowCount(12);
-			dropDownMonths.setToolTipText("Select month");
-			dropDownDays.setToolTipText("Select day");
-			dropDownDays.setMaximumRowCount(12);
-		
-			alarmDisplayPanel.add(dropDownYears);
-			alarmDisplayPanel.add(dropDownMonths); 
-			alarmDisplayPanel.add(dropDownDays); 
-			alarmDisplayPanel.add(dropDownHours);
-			alarmDisplayPanel.add(dropDownMinutes);
-			
-			
-			JCheckBox alarmTickBox = new JCheckBox("Alarm on");
-			
-			alarmTickBox.addActionListener(new ActionListener() {
-			    @Override
-			    public void actionPerformed(ActionEvent event) {
-			    //ett nytt alarm sätts med de valda inställningarna i menyn om användaren fyller i tickbox
-			        if (alarmTickBox.isSelected()) {
-			        	int alarmYear = Integer.parseInt(dropDownYears.getSelectedItem().toString());
-			        	int alarmMonth = getMonthNumber(dropDownMonths.getSelectedItem().toString());
-			        	int alarmDay = Integer.parseInt(dropDownDays.getSelectedItem().toString());
-						int alarmHour = Integer.parseInt(dropDownHours.getSelectedItem().toString());
-						int alarmMinute = Integer.parseInt(dropDownMinutes.getSelectedItem().toString());
-						alarm.setAlarmTime(alarmYear, alarmMonth, alarmDay, alarmHour, alarmMinute);
-						alarm.setAlarmOn(true);
-						updateAlarmDisplayText();
-			        } 
-			        else if (!alarmTickBox.isSelected()){
-			        	alarm.setAlarmOn(false);
-						updateAlarmDisplayText(); 
-			            
-			        }
-			    }
-			});
-			
-			
-			alarmDisplayPanel.add(alarmTickBox);
 			alarmDisplayText = new JTextPane();
-			alarmDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 99));
+			alarmDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 25));
 			alarmDisplayText.setBackground(new Color(255, 255, 255));
 			alarmDisplayText.setBorder(null);
 			alarmDisplayText.setOpaque(false);
-			alarmDisplayText.setEditable(false);
 			alarmDisplayPanel.add(alarmDisplayText);
-			timeDisplayPanel.add(alarmDisplayPanel, "8, 2, center, center");
+			timeDisplayPanel.add(alarmDisplayPanel);
+			dropDownMonths = new JComboBox<String>();
+			dropDownMonths.setBounds(242, 515, 52, 27);
+			timeDisplayPanel.add(dropDownMonths);
+			
+			
+			
+			dropDownMonths.addActionListener(new ActionListener() {
+				//Om användaren byter månad i menyn ska dagar uppdateras för den valda månaden och året 
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					if (alarmMenuDisplaysCurrentDate) {
+						int year = Integer.parseInt(dropDownYears.getSelectedItem().toString());
+			        	int month = getMonthNumber(dropDownMonths.getSelectedItem().toString());
+			        	int date = Integer.parseInt(dropDownDays.getSelectedItem().toString());
+						int hour = Integer.parseInt(dropDownHours.getSelectedItem().toString());
+						int minute = Integer.parseInt(dropDownMinutes.getSelectedItem().toString());
+						updateDropDownDays( new GregorianCalendar(year, month, date, hour, minute, 0));
+					}
+				}
+				
+			});
+			dropDownMonths.setMaximumRowCount(12);
+			dropDownMonths.setToolTipText("Select month");
+			dropDownDays = new JComboBox<String>();
+			dropDownDays.setBounds(306, 515, 52, 27);
+			timeDisplayPanel.add(dropDownDays);
+			dropDownDays.setToolTipText("Select day");
+			dropDownDays.setMaximumRowCount(12);
+			
+			//dropdowns visar timmar och minuter
+			dropDownHours = new JComboBox<String>();
+			dropDownHours.setBounds(399, 515, 52, 27);
+			timeDisplayPanel.add(dropDownHours);
+			
+			// Rubrik
+			
+			JTextPane txtpnThealarmclock = new JTextPane();
+			txtpnThealarmclock.setFont(new Font("Lucida Grande", Font.BOLD, 24));
+			txtpnThealarmclock.setText("TheAlarmClock");
+			txtpnThealarmclock.setBounds(259, 60, 192, 48);
+			timeDisplayPanel.add(txtpnThealarmclock);
+			
+			// Alarmrubrik
+			JLabel lblAlarm = new JLabel("Alarm");
+			lblAlarm.setFont(new Font("Tahoma", Font.BOLD, 25));
+			lblAlarm.setBounds(309, 417, 75, 34);
+			timeDisplayPanel.add(lblAlarm);
+			
+			// Rubrik hh/mm
+						JLabel lblDate = new JLabel("Year     Month.    Day");
+						lblDate.setSize(191, 16);
+						lblDate.setLocation(181, 475);
+						lblDate.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
+						timeDisplayPanel.add(lblDate);
+			
+			
+				
+				dropDownHours.setToolTipText("Select hour");
+				dropDownHours.setMaximumRowCount(12);
+				dropDownMinutes = new JComboBox<String>();
+				dropDownMinutes.setBounds(461, 515, 52, 27);
+				timeDisplayPanel.add(dropDownMinutes);
+				dropDownMinutes.setToolTipText("Select Minute");
+				dropDownMinutes.setMaximumRowCount(12);
+				
+				
+				JCheckBox alarmTickBox = new JCheckBox("Alarm on");
+				alarmTickBox.setFont(new Font("Lucida Grande", Font.BOLD, 16));
+				alarmTickBox.setBounds(293, 569, 139, 23);
+				timeDisplayPanel.add(alarmTickBox);
+				
+				JLabel lblHourMinute = new JLabel("Hour.    Minute");
+				lblHourMinute.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
+				lblHourMinute.setBounds(399, 475, 139, 16);
+				timeDisplayPanel.add(lblHourMinute);
+				
+				alarmTickBox.addActionListener(new ActionListener() {
+				    @Override
+				    public void actionPerformed(ActionEvent event) {
+				    
+				        if (alarmTickBox.isSelected()) {
+				        	int alarmYear = Integer.parseInt(dropDownYears.getSelectedItem().toString());
+				        	int alarmMonth = getMonthNumber(dropDownMonths.getSelectedItem().toString());
+				        	int alarmDay = Integer.parseInt(dropDownDays.getSelectedItem().toString());
+							int alarmHour = Integer.parseInt(dropDownHours.getSelectedItem().toString());
+							int alarmMinute = Integer.parseInt(dropDownMinutes.getSelectedItem().toString());
+							alarm.setAlarmTime(alarmYear, alarmMonth, alarmDay, alarmHour, alarmMinute);
+							alarm.setAlarmOn(true);
+							updateAlarmDisplayText();
+				        } 
+				        else if (!alarmTickBox.isSelected()){
+				        	alarm.setAlarmOn(false);
+							updateAlarmDisplayText(); 
+				            
+				        }
+				    }
+				});
 			
 			this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 			this.setVisible(true);
@@ -290,21 +344,53 @@ private void increaseAvailibleYearsInMenu() {
 				
 				while (true) {
 					currentTimeObject = new GregorianCalendar();
+					currentDateObject = new GregorianCalendar();
 					
 					//kickar igång alarmet om alarmet är på och tiden är lika med aktuell tidpunkt
 					if (alarm.alarmIsOn() && alarm.isEqualTo(currentTimeObject)) {
 						alarm.triggerAlarm();
 					}
-					dateFormatEdit = formatFMAM(currentTimeObject);
+					//dateFormatEdit = formatFMAM(currentTimeObject);
+					
+					presentTime = format24h(currentTimeObject);
+					presentDate = formatDate(currentDateObject);
+					
 					try {
 						this.sleep(500);//pausa  uppdatering av tid 0.5 sek
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
-					showTime(dateFormatEdit); //Uppdatera textfältet som visar tiden
+					showTime(presentTime); //Uppdatera textfältet som visar tiden
+					showDate(presentDate); // Uppdatera textfältet som visar datum
 				}
 			}
 		}.start();
+	}
+	
+	public void showDate(String time) {
+		dateDisplayText.setText(time);
+	}
+	
+	
+	// Metod som visar tiden 
+	public static String format24h(GregorianCalendar calendar) {
+		SimpleDateFormat fmt = new SimpleDateFormat("HH:mm:ss");
+		fmt.setCalendar(calendar);
+		String dateFormatted = fmt.format(calendar.getTime());
+		
+		
+		return dateFormatted;
+	}
+	// Metod som visar Datum
+	public static String formatDate(GregorianCalendar calendar) {
+		SimpleDateFormat fmt = new SimpleDateFormat("EEE MMM d yyyy");
+		fmt.setCalendar(calendar);
+		String dateFormatted = fmt.format(calendar.getTime());
+		
+		// Stor första bokstav i dag och mån
+		String dateFormatted_1 = dateFormatted.substring(0, 1).toUpperCase()+dateFormatted.substring(1,3) + dateFormatted.substring(3, 4).toUpperCase()+dateFormatted.substring(4);
+		
+		return dateFormatted_1;
 	}
 	
 		//visar alarmtid om alarmet är på annars "alarm off"
@@ -331,4 +417,3 @@ private void increaseAvailibleYearsInMenu() {
 		
 		}
 }
-
