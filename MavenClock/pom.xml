@@ -6,5 +6,20 @@
   <properties>
    <maven.compiler.source>1.8</maven.compiler.source>
    <maven.compiler.target>1.8</maven.compiler.target>
-</properties> 
+</properties>
+<dependencies>
+<!-- https://mvnrepository.com/artifact/com.jgoodies/forms -->
+<dependency>
+    <groupId>com.jgoodies</groupId>
+    <artifactId>forms</artifactId>
+    <version>1.2.1</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/com.miglayout/miglayout -->
+<dependency>
+    <groupId>com.miglayout</groupId>
+    <artifactId>miglayout</artifactId>
+    <version>3.7.4</version>
+</dependency>
+
+</dependencies> 
 </project> 

@@ -21,6 +21,10 @@ import javax.swing.border.EmptyBorder;
 
 public class ClockWindow extends JFrame {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	String presentTime;
 	String presentDate;
 	private String dateFormatEdit;
@@ -28,7 +32,7 @@ public class ClockWindow extends JFrame {
 	private GregorianCalendar currentDateObject;
 	
 	private int count = 0;
-	private Alarm alarm = new Alarm();
+	private static Alarm alarm = new Alarm();
 	private JPanel timeDisplayPanel;
 	private JPanel alarmDisplayPanel;
 	
@@ -201,6 +205,9 @@ private void increaseAvailibleYearsInMenu() {
 	        sound1 = new JMenuItem("Sound 1");
 	        sound2 = new JMenuItem("Sound 2");
 	        sound3 = new JMenuItem("Sound 3");
+	        sound1.addActionListener(new SetSound(0));
+	        sound2.addActionListener(new SetSound(1));
+	        sound3.addActionListener(new SetSound(2));
 	        menuAlarmSound.add(sound1);
 	        menuAlarmSound.add(sound2);
 	        menuAlarmSound.add(sound3);
@@ -452,4 +459,18 @@ private void increaseAvailibleYearsInMenu() {
 			return monthNum;
 		
 		}
+		 
+		 //en set-metod för att komma åt att sätta ljudet utifrån klassen
+		 public static void setAlarmSound(int number) {
+			 alarm.changeDefaultSoundFile(number);
+		 }
 }
+
+
+
+
+
+
+
+
+
