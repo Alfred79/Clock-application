@@ -1,3 +1,4 @@
+package clock;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -35,11 +36,6 @@ public class ClockWindow extends JFrame {
 	private JTextPane alarmDisplayText;
 	private JTextPane dateDisplayText;
 	
-	// skapar meny
-	static JFrame frame;
-	static JMenuBar mb;
-	static JMenu x;
-	static JMenuItem m1, m2, m3;
 	
 	
 	private JComboBox<String> dropDownHours;
@@ -188,23 +184,38 @@ private void increaseAvailibleYearsInMenu() {
 			dateDisplayText.setOpaque(false);
 			timeDisplayPanel.add(dateDisplayText);
 			
-			//Bygger upp menynhögst upp i fönstret (MenuBar)
-			frame = new JFrame("Clock");
-			mb = new JMenuBar();
-			x= new JMenu("Inställningar");
-			m1 = new JMenuItem("Tidzon1");
-			m2 = new JMenuItem("Tidzon2");
-			m3 = new JMenuItem("Tidzon3");
-			x.add(m1);
-			x.add(m2);
-			x.add(m3);
-			mb.add(x);
-			frame.setJMenuBar(mb);
-			frame.setSize(500, 500);
-			frame.setVisible(true);
+			
 			
 			
 			//Panel fÃ¶r larmvisning+funktioner
+
+			
+			//Bygger upp menynhögst upp i fönstret (MenuBar)
+			JMenuBar mb = new JMenuBar();
+	        mb.setBounds(0, 0, 682, 22);
+	        
+	        JMenu menuTimeZone = new JMenu();
+	        JMenu menuAlarmSound;
+	        menuAlarmSound = new JMenu("Alarm Sounds");
+	        JMenuItem sound1, sound2, sound3;
+	        sound1 = new JMenuItem("Sound 1");
+	        sound2 = new JMenuItem("Sound 2");
+	        sound3 = new JMenuItem("Sound 3");
+	        menuAlarmSound.add(sound1);
+	        menuAlarmSound.add(sound2);
+	        menuAlarmSound.add(sound3);
+	        menuTimeZone = new JMenu("Timezone");
+	        JMenuItem menuItem1, menuItem2, menuItem3;
+	        menuItem1 = new JMenuItem("Tidzon1");
+	        menuItem2 = new JMenuItem("Tidzon2");
+	        menuItem3 = new JMenuItem("Tidzon3");
+	        menuTimeZone.add(menuItem1);
+	        menuTimeZone.add(menuItem2);
+	        menuTimeZone.add(menuItem3);
+	        mb.add(menuTimeZone);
+	        mb.add(menuAlarmSound);
+	        timeDisplayPanel.add(mb);
+			
 			alarmDisplayPanel = new JPanel();
 			alarmDisplayPanel.setBounds(219, 645, 268, 39);
 			alarmDisplayPanel.setBackground(Color.WHITE);
