@@ -69,7 +69,7 @@ public class Alarm {
 	}
 	
 
-	public void turnOfAlarm() {
+	public void turnOffAlarm() {
 		if (alarmSoundIsRunning) {
 			alarmSoundclip.stop();
 			alarmSoundIsRunning = false;

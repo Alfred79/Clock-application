@@ -576,7 +576,7 @@ private void initComponentsLarge() {
 				        else if (alarmTickBox.isSelected()){
 				        	alarm.setAlarmIsSetOn(false);
 							updateAlarmDisplayText(); 
-							alarm.turnOfAlarm();
+							alarm.turnOffAlarm();
 							alarmTickBox.setSelected(false);
 							btnOnOff.setText("Off");
 							btnOnOff.setBackground(Color.WHITE);
@@ -673,7 +673,7 @@ private void initComponentsLarge() {
 							updateAlarmDisplayText(); 
 							updateAlarmDateDisplayText();
 							alarmDisplayText.setText("--:--:--  ");
-							alarm.turnOfAlarm();
+							alarm.turnOffAlarm();
 							
 				            
 				        }
