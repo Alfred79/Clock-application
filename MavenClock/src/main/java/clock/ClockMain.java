@@ -22,7 +22,7 @@ public class ClockMain {
 			public void run() {
 				try {
 					ClockWindow frame = new ClockWindow();
-					
+
 					} catch (Exception e) {
 					e.printStackTrace();
 				}
