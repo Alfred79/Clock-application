@@ -1,3 +1,4 @@
+package clock;
 
 import java.awt.EventQueue;
 
