@@ -22,7 +22,7 @@ public class Alarm {
 	private boolean snoozeIsPressed;
 	private int snoozeTimeMinutes = 1;
 	
-	private ArrayList<File> soundFiles = new ArrayList<File>();
+	private static ArrayList<File> soundFiles = new ArrayList<File>();
 	private static File defaultAlarmSoundFile;
 	
 	//Objekt för at spela upp ljud
@@ -56,9 +56,10 @@ public class Alarm {
 		if (alarmSoundIsRunning) {
 			alarmSoundclip.stop();
 			alarmSoundIsRunning = false;
-			CompactMode.BackgroundAlarmOn.setVisible(false);
+
+			ClockWindow.BackgroundAlarmOn.setVisible(false);
 			}
-    
+
 	//skapar nytt tidsobjekt med aktuell tid när snoozeknappen trycks
 	Calendar currentTime = new GregorianCalendar(); 
 	//Lägger till det antal minuter som användaren valt att snooza
@@ -67,11 +68,12 @@ public class Alarm {
 	alarmTime = currentTime; 
 	}
 	
-	public void turnOffAlarm() {
+
+	public void turnOfAlarm() {
 		if (alarmSoundIsRunning) {
 			alarmSoundclip.stop();
 			alarmSoundIsRunning = false;
-			CompactMode.BackgroundAlarmOn.setVisible(false);
+			ClockWindow.BackgroundAlarmOn.setVisible(false);
 
 			
 			//alarmet är avstängt
@@ -115,7 +117,8 @@ public class Alarm {
 	public static void triggerAlarm() {
 		new Thread() {
 			public void run() {
-				CompactMode.BackgroundAlarmOn.setVisible(true);
+
+				ClockWindow.BackgroundAlarmOn.setVisible(true);
 
 				if (!alarmSoundIsRunning) {
 					loopAlarmSoundFile();
@@ -125,16 +128,20 @@ public class Alarm {
 	}
 	
 	//	Ändra vald ljudfil. 
-	void changeDefaultSoundFile(int soundFileIndex) {
+
+	static void changeDefaultSoundFile(int soundFileIndex) {
+
 
 		defaultAlarmSoundFile = soundFiles.get(soundFileIndex);
 	}
 	
 	public String getAlarmTime() {
 		String alarmTimeString = dateFormater.format(alarmTime.getTime());
+
 		return alarmTimeString;
 	}
 	
+
 	public void setAlarmTime(int year, int month, int date, int hour, int minute) {
 		alarmTime = new GregorianCalendar(year, month, date, hour, minute, 0);
 		//0=jan, 1=feb , osv
