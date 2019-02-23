@@ -414,7 +414,7 @@ private void increaseAvailibleYearsInMenu() {
 				        	alarm.setAlarmIsSetOn(false);
 							updateAlarmDisplayText(); 
 
-							alarm.turnOfAlarm();
+							alarm.turnOffAlarm();
 
 				            
 				        }
