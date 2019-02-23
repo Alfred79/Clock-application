@@ -125,8 +125,11 @@ public class Alarm {
 	
 	public String getAlarmTime() {
 		String alarmTimeString = dateFormater.format(alarmTime.getTime());
+		
+		
 		return alarmTimeString;
 	}
+	
 	
 	public void setAlarmTime(int year, int month, int date, int hour, int minute) {
 		alarmTime = new GregorianCalendar(year, month, date, hour, minute, 0);

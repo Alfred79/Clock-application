@@ -17,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
+import javax.swing.JTextField;
 
 public class ClockWindow extends JFrame {
 	
@@ -60,10 +61,12 @@ public class ClockWindow extends JFrame {
 	JButton btnCompactMode;
 	JButton btnOnOff;
 	JLabel lblSetMin;
+	JTextPane alarmDate;
 	
 	
 	
 	JButton btnLargeMode;
+	private JTextField AlarmDate;
 	
 	//Konstruera klockfönstret
 	public ClockWindow() {
@@ -196,8 +199,12 @@ private void initComponentsCompact() {
 	dateDisplayText.setBounds(15, 32, 66, 13);
 	dateDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 8));
 	
-	alarmDisplayPanel.setBounds(10, 57, 95, 41);
-	alarmDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 10));
+	alarmDisplayPanel.setBounds(13, 35, 72, 30);
+	alarmDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 18));
+	
+	
+	alarmDate.setBounds(13, 67, 70, 30);
+	alarmDate.setFont(new Font("Lucida Grande", Font.PLAIN, 8));
 	
 	dropDownYears.setFont(new Font("Lucida Grande", Font.PLAIN, 6));
 	dropDownYears.setBounds(8, 125, 70, 17);
@@ -229,6 +236,8 @@ private void initComponentsCompact() {
 private void initComponentsLarge() {
 	
 	setSize(700, 1000);
+	alarmDate.setText("Alarm Off");
+	
 	alarmTickBox.setVisible(true);
 	alarmTickBox.setBounds(523, 407, 28, 28);
 	BackgroundImage.setVisible(true);
@@ -237,6 +246,9 @@ private void initComponentsLarge() {
 	btnCompactMode.setVisible(true);
 	dropDownSnoozeMinutes.setBounds(327, 753, 55, 17);
 	btnLargeMode.setVisible(false);
+	
+	alarmDate.setBounds(312, 646, 70, 25);
+	alarmDate.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
 	
 	timeDisplayText.setBounds(224, 170, 245, 120);
 	timeDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 60));
@@ -300,7 +312,7 @@ private void initComponentsLarge() {
 			
 			//Panel för larmvisning+funktioner
 			alarmDisplayPanel = new JPanel();
-			alarmDisplayPanel.setBounds(220, 590, 268, 39);
+			alarmDisplayPanel.setBounds(245, 581, 199, 63);
 			alarmDisplayPanel.setBackground(Color.WHITE);
 			alarmDisplayPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 			
@@ -330,12 +342,15 @@ private void initComponentsLarge() {
 			dropDownYears.setEditable(true);
 			dropDownYears.getEditor().getEditorComponent().setBackground(Color.WHITE);
 			alarmDisplayText = new JTextPane();
-			alarmDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 25));
+			alarmDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 35));
 			alarmDisplayText.setBackground(new Color(255, 255, 255));
 			alarmDisplayText.setBorder(null);
 			alarmDisplayText.setOpaque(false);
+			alarmDisplayText.setText("--:--:--  ");
 			alarmDisplayPanel.add(alarmDisplayText);
 			timeDisplayPanel.add(alarmDisplayPanel);
+			
+			
 			dropDownMonths = new JComboBox<String>();
 			dropDownMonths.setBounds(257, 527, 52, 17);
 			dropDownMonths.setEditable(true);
@@ -409,8 +424,9 @@ private void initComponentsLarge() {
 				timeDisplayPanel.add(lblHourMinute);
 				
 				btnSnooze = new JButton("Snooze");
-				btnSnooze.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
-				btnSnooze.setBounds(305, 708, 93, 30);
+				btnSnooze.setFont(new Font("Lucida Grande", Font.PLAIN, 28));
+				btnSnooze.setBorder(new LineBorder(Color.BLACK));
+				btnSnooze.setBounds(212, 683, 265, 63);
 				btnSnooze.addActionListener(new ActionListener() {
 
 					@Override
@@ -420,10 +436,19 @@ private void initComponentsLarge() {
 					
 				});
 				
+				btnSnooze.addMouseListener(new java.awt.event.MouseAdapter() {
+				    public void mouseEntered(java.awt.event.MouseEvent evt) {
+				    	btnSnooze.setForeground(Color.RED);
+				    }
+				    public void mouseExited(java.awt.event.MouseEvent evt) {
+				    	btnSnooze.setForeground(Color.WHITE);
+				    }
+				});
+				
 				timeDisplayPanel.add(btnSnooze);
 				
 				dropDownSnoozeMinutes = new JComboBox<String>();
-				dropDownSnoozeMinutes.setBounds(327, 753, 55, 17);
+				dropDownSnoozeMinutes.setBounds(303, 757, 55, 17);
 				dropDownSnoozeMinutes.setEditable(true);
 				dropDownSnoozeMinutes.getEditor().getEditorComponent().setBackground(Color.WHITE);
 				//addera stringobjekt till dropdownmenyn
@@ -487,6 +512,7 @@ private void initComponentsLarge() {
 							updateAlarmDisplayText();
 							alarmTickBox.setSelected(true);
 							btnOnOff.setText("On");
+							updateAlarmDateDisplayText();
 							BackgroundImgCompact.setVisible(false);
 							
 							
@@ -500,6 +526,8 @@ private void initComponentsLarge() {
 							alarmTickBox.setSelected(false);
 							btnOnOff.setText("Off");
 							btnOnOff.setBackground(Color.WHITE);
+							updateAlarmDateDisplayText();
+							alarmDisplayText.setText("--:--:--  ");
 							BackgroundImgCompact.setVisible(true);
 					}}
 				});
@@ -519,9 +547,19 @@ private void initComponentsLarge() {
 				btnLargeMode.setVisible(false);
 				timeDisplayPanel.add(btnLargeMode);
 				
+				
+				alarmDate = new JTextPane();
+				alarmDate.setBounds(308, 646, 82, 25);
+				alarmDate.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+				timeDisplayPanel.add(alarmDate);
+				
+				JLabel lblSetMin_1 = new JLabel("Minutes");
+				lblSetMin_1.setBounds(370, 757, 61, 16);
+				timeDisplayPanel.add(lblSetMin_1);
+				
 				// Väljer Bakgrundsbilder beroende på status och Mode
 				BackgroundImage = new JLabel("");
-				BackgroundMain = new ImageIcon("src/main/resources/img/BackgroundMain.jpg");
+				BackgroundMain = new ImageIcon("src/main/resources/img/BGImage_Large.jpg");
 				BackgroundImage.setBounds(0, 0, 700, 1000);
 				BackgroundImage.setIcon(BackgroundMain);
 				timeDisplayPanel.add(BackgroundImage);
@@ -544,6 +582,12 @@ private void initComponentsLarge() {
 				BackgroundAlarmSet.setBounds(0, 0, 300, 150);
 				BackgroundAlarmSet.setIcon(BackgroundAlarmSetIcon);
 				timeDisplayPanel.add(BackgroundAlarmSet);
+				alarmDate.setText("Alarm Off");
+				
+				
+				
+				
+				
 				
 				
 				
@@ -566,11 +610,14 @@ private void initComponentsLarge() {
 							alarm.setAlarmTime(alarmYear, alarmMonth, alarmDay, alarmHour, alarmMinute);
 							alarm.setAlarmIsSetOn(true);
 							updateAlarmDisplayText();
+							updateAlarmDateDisplayText();
 							
 				        } 
 				        else if (!alarmTickBox.isSelected()){
 				        	alarm.setAlarmIsSetOn(false);
 							updateAlarmDisplayText(); 
+							updateAlarmDateDisplayText();
+							alarmDisplayText.setText("--:--:--  ");
 							alarm.turnOfAlarm();
 							
 				            
@@ -590,9 +637,10 @@ private void initComponentsLarge() {
 		}
 		
 		//Lägger till alarmtiden i fönstret
-		public void showAlarmTime(String alarmTime) {
+		/*public void showAlarmTime(String alarmTime) {
+			
 			alarmDisplayText.setText(alarmTime);
-		}
+		}*/
 		
 		// Formaterar tiden - formatmall kan hittas här:
 		// https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
@@ -666,11 +714,21 @@ private void initComponentsLarge() {
 		//visar alarmtid om alarmet är på annars "alarm off"
 		private void updateAlarmDisplayText() {
 		if (alarm.getAlarmIsSetOn()==true) {
-			alarmDisplayText.setText(alarm.getAlarmTime());
-		}	else {
-			alarmDisplayText.setText("Off"); 
+			String alarmTimeString= alarm.getAlarmTime();
+			String aTime = alarmTimeString.substring(11, 19);
+			alarmDisplayText.setText(aTime);
+		}	
 		}
-		}
+		
+		private void updateAlarmDateDisplayText() {
+			if (alarm.getAlarmIsSetOn()==true) {
+				String alarmTimeString= alarm.getAlarmTime();
+				String aDate = alarmTimeString.substring(0, 10);
+				alarmDate.setText(aDate);
+			}else {
+				alarmDate.setText("Alarm Off"); 
+			}	
+			}
 		
 		/*tar emot förkortad månad(jan, feb etc) som string  och returernerar månadens 
 		motsvarande parameter till Calendarclassens konstruktor för att bestämma månad */  
