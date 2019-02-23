@@ -1,10 +1,12 @@
 package clock;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-
 import java.awt.Color;
 import javax.swing.JTextPane;
 import java.awt.Font;
@@ -12,6 +14,16 @@ import java.text.DateFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JTextPane;
+import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
@@ -22,6 +34,8 @@ import javax.swing.JTextField;
 
 public class ClockWindow extends JFrame {
 	
+  private static final long serialVersionUID = 1L;
+
 	String presentTime;
 	String presentDate;
 	private String dateFormatEdit;
@@ -29,7 +43,9 @@ public class ClockWindow extends JFrame {
 	private GregorianCalendar currentDateObject;
 	
 	private int count = 0;
-	private Alarm alarm = new Alarm();
+
+	
+
 	private JPanel timeDisplayPanel;
 	private JPanel alarmDisplayPanel;
 	
@@ -43,6 +59,7 @@ public class ClockWindow extends JFrame {
 	private JComboBox<String> dropDownMonths;
 	private JComboBox<String> dropDownDays;
 	private boolean alarmMenuDisplaysCurrentDate; 
+
 	private JButton btnSnooze;
 	private static JLabel lblAlarmOn;
 	private JLabel lblNewLabel;
@@ -64,10 +81,13 @@ public class ClockWindow extends JFrame {
 	JLabel lblSetMin;
 	JTextPane alarmDate;
 	
-	
-	
+	static Alarm alarm = new Alarm();
+	JMenu menuTimeZone;
+	JMenu menuAlarmSound;
+	JMenuBar mb;
 	JButton btnLargeMode;
 	private JTextField AlarmDate;
+
 	
 	//Konstruera klockfönstret
 	public ClockWindow() {
@@ -77,7 +97,7 @@ public class ClockWindow extends JFrame {
 		updateAlarmDisplayText();
 		alarmMenuDisplaysCurrentDate = true;
 		}
-			
+
 	//Sätter alarmmenyn till aktuellt datum 
 	private void setInitialAlarmMenus(GregorianCalendar currentTimeObject) {
 		setInitialDropDownMinutes();
@@ -178,7 +198,6 @@ private void increaseAvailibleYearsInMenu() {
 		}
 	}
 
-
 // Ändrar GUI efter Compact Mode
 private void initComponentsCompact() {
 	
@@ -193,6 +212,8 @@ private void initComponentsCompact() {
 	btnCompactMode.setVisible(false);
 	dropDownSnoozeMinutes.setBounds(245, 33, 50, 18);
 	btnLargeMode.setVisible(true);
+	
+	mb.setVisible(false);
 	
 	timeDisplayText.setBounds(12, 11, 97, 18);
 	timeDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -247,6 +268,8 @@ private void initComponentsLarge() {
 	btnCompactMode.setVisible(true);
 	dropDownSnoozeMinutes.setBounds(327, 753, 55, 17);
 	btnLargeMode.setVisible(false);
+	
+	mb.setVisible(true);
 	
 	alarmDate.setBounds(312, 646, 70, 25);
 	alarmDate.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
@@ -309,6 +332,35 @@ private void initComponentsLarge() {
 			dateDisplayText.setOpaque(false);
 			
 			timeDisplayPanel.add(dateDisplayText);
+
+			//Bygger upp menynh�gst upp i f�nstret (MenuBar)
+			mb = new JMenuBar();
+	        mb.setBounds(0, 0, 682, 22);
+	        
+	        menuTimeZone = new JMenu();
+	        menuAlarmSound = new JMenu("Alarm Sounds");
+	        JMenuItem sound1, sound2, sound3;
+	        sound1 = new JMenuItem("Sound 1");
+	        sound2 = new JMenuItem("Sound 2");
+	        sound3 = new JMenuItem("Sound 3");
+	        sound1.addActionListener(new SetSound(0));
+	        sound2.addActionListener(new SetSound(1));
+	        sound3.addActionListener(new SetSound(2));
+	        menuAlarmSound.add(sound1);
+	        menuAlarmSound.add(sound2);
+	        menuAlarmSound.add(sound3);
+	        menuTimeZone = new JMenu("Timezone");
+	        JMenuItem menuItem1, menuItem2, menuItem3;
+	        menuItem1 = new JMenuItem("Tidzon1");
+	        menuItem2 = new JMenuItem("Tidzon2");
+	        menuItem3 = new JMenuItem("Tidzon3");
+	        menuTimeZone.add(menuItem1);
+	        menuTimeZone.add(menuItem2);
+	        menuTimeZone.add(menuItem3);
+	        mb.add(menuTimeZone);
+	        mb.add(menuAlarmSound);
+	        timeDisplayPanel.add(mb);
+	        
 			
 			
 			//Panel för larmvisning+funktioner
@@ -475,12 +527,13 @@ private void initComponentsLarge() {
 				
 				
 				btnCompactMode = new JButton("Compact Mode");
+				btnCompactMode.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 				btnCompactMode.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						initComponentsCompact();
 					}
 				});
-				btnCompactMode.setBounds(19, 0, 127, 29);
+				btnCompactMode.setBounds(10, 23, 98, 29);
 				timeDisplayPanel.add(btnCompactMode);
 				
 				btnSnooze = new JButton("Snooze");
@@ -538,13 +591,14 @@ private void initComponentsLarge() {
 				timeDisplayPanel.add(btnOnOff);
 				
 				btnLargeMode = new JButton("X");
+				btnLargeMode.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 				btnLargeMode.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						
 						initComponentsLarge();
 					}
 				});
-				btnLargeMode.setBounds(0, 0, 20, 20);
+				btnLargeMode.setBounds(0, 0, 13, 13);
 				btnLargeMode.setVisible(false);
 				timeDisplayPanel.add(btnLargeMode);
 				
@@ -630,18 +684,14 @@ private void initComponentsLarge() {
 				
 			this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 			this.setVisible(true);
-		}
-		
+		}		
 		//Lägger till tiden till fönstret
 		public void showTime(String time) {
 			timeDisplayText.setText(time);
 		}
 		
 		//Lägger till alarmtiden i fönstret
-		/*public void showAlarmTime(String alarmTime) {
-			
-			alarmDisplayText.setText(alarmTime);
-		}*/
+
 		
 		// Formaterar tiden - formatmall kan hittas här:
 		// https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
@@ -664,7 +714,10 @@ private void initComponentsLarge() {
 					currentDateObject = new GregorianCalendar();
 					
 					//kickar igång alarmet om alarmet är på och tiden är lika med aktuell tidpunkt
-					if (alarm.getAlarmIsSetOn() && alarm.alarmTimeIsEqual(currentTimeObject)) {
+
+					if (alarm.isAlarmSoundRunning() && alarm.alarmTimeIsEqual(currentTimeObject)) {
+
+
 						alarm.triggerAlarm();
 					}
 					//dateFormatEdit = formatFMAM(currentTimeObject);
@@ -710,6 +763,7 @@ private void initComponentsLarge() {
 		return dateFormatted_1;
 	}
 	
+
 	
 	
 		//visar alarmtid om alarmet är på annars "alarm off"
@@ -730,6 +784,7 @@ private void initComponentsLarge() {
 				alarmDate.setText("Alarm Off"); 
 			}	
 			}
+
 		
 		/*tar emot förkortad månad(jan, feb etc) som string  och returernerar månadens 
 		motsvarande parameter till Calendarclassens konstruktor för att bestämma månad */  
@@ -745,4 +800,17 @@ private void initComponentsLarge() {
 			return monthNum;
 		
 		}
+
+		 
+		 //en set-metod f�r att komma �t att s�tta ljudet utifr�n klassen
+		 public static void setAlarmSound(int number) {
+			 alarm.changeDefaultSoundFile(number);
+		 }
 }
+
+
+
+
+
+
+
