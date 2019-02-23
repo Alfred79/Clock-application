@@ -533,7 +533,7 @@ private void initComponentsLarge() {
 						initComponentsCompact();
 					}
 				});
-				btnCompactMode.setBounds(10, 23, 98, 29);
+				btnCompactMode.setBounds(-13, 30, 98, 29);
 				timeDisplayPanel.add(btnCompactMode);
 				
 				btnSnooze = new JButton("Snooze");
