@@ -1,4 +1,5 @@
 
+
 import java.applet.Applet;
 import java.applet.AudioClip;
 import java.io.File;
@@ -163,4 +164,5 @@ public class Alarm {
 	public void setSnoozeTimeInMinutes(int minutes) {
 		snoozeTimeMinutes = minutes; 
 	}
+
 }
