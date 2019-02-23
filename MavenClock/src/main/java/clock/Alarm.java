@@ -27,6 +27,7 @@ public class Alarm {
 	
 	//Objekt för at spela upp ljud
 	private volatile static AudioClip alarmSoundclip;
+
 	
 	//Konstruerar alarmet
 	public Alarm() {
@@ -57,6 +58,7 @@ public class Alarm {
 			alarmSoundIsRunning = false;
 			CompactMode.BackgroundAlarmOn.setVisible(false);
 			}
+    
 	//skapar nytt tidsobjekt med aktuell tid när snoozeknappen trycks
 	Calendar currentTime = new GregorianCalendar(); 
 	//Lägger till det antal minuter som användaren valt att snooza
@@ -70,6 +72,7 @@ public class Alarm {
 			alarmSoundclip.stop();
 			alarmSoundIsRunning = false;
 			CompactMode.BackgroundAlarmOn.setVisible(false);
+
 			
 			//alarmet är avstängt
 			this.setAlarmIsSetOn(false);
@@ -78,6 +81,7 @@ public class Alarm {
 	
 
 	public synchronized static void loopAlarmSoundFile() {
+
 		if (!alarmSoundIsRunning) {
 			try {
 				//skapa nytt ljudklipp 
@@ -112,6 +116,7 @@ public class Alarm {
 		new Thread() {
 			public void run() {
 				CompactMode.BackgroundAlarmOn.setVisible(true);
+
 				if (!alarmSoundIsRunning) {
 					loopAlarmSoundFile();
 				}
@@ -121,6 +126,7 @@ public class Alarm {
 	
 	//	Ändra vald ljudfil. 
 	void changeDefaultSoundFile(int soundFileIndex) {
+
 		defaultAlarmSoundFile = soundFiles.get(soundFileIndex);
 	}
 	
@@ -135,6 +141,7 @@ public class Alarm {
 	}
 	
 	public static boolean getAlarmIsSetOn() {
+
 		return alarmIsSetOn;
 	}
 	
@@ -162,5 +169,4 @@ public class Alarm {
 		snoozeTimeMinutes = minutes; 
 	}
 
-	
 }
