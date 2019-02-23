@@ -56,7 +56,6 @@ public class ClockWindow extends JFrame {
 		setInitialDropDownDays(currentTimeObject);
 		setInitialDropDownMonths(currentTimeObject);
 		setInitialDropDownYears(currentTimeObject);
-		
 	}
 	
 	private void setInitialDropDownHours() {//vektorer med valbara minuter och timmar för larm
