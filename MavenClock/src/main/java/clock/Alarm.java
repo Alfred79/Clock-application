@@ -1,46 +1,36 @@
 package clock;
 
+import java.applet.Applet;
+import java.applet.AudioClip;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.List;
-
-import javax.swing.JOptionPane;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
+import java.net.MalformedURLException;
 
 public class Alarm {
 	
 	//denna alarmtid ska sättas av användaren
-	private Calendar alarmTime;
-	private boolean alarmOn; 
+	private static Calendar alarmTime;
+	private static boolean alarmIsSetOn;
+	private volatile static boolean alarmSoundIsRunning = false;
 	//formaterar alarmtiden till enhetlig output som string
-	private DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
-	//Objekt för att läsa in och spela upp alarmljudet
-		private InputStream soundFileInputStream;
-		@SuppressWarnings("restriction")
-		private AudioStream audioStream;
-		@SuppressWarnings("restriction")
-		private AudioPlayer alarmSoundPlayer = null;
-		
-	private List<File> soundFiles = new ArrayList<File>();
-	private File defaultAlarmSoundFile; 
+	private boolean snoozeIsPressed;
+	private int snoozeTimeMinutes = 1;
 	
-	public int getSoundFilesCount() {
-		return soundFiles.size();
-	}
+	private ArrayList<File> soundFiles = new ArrayList<File>();
+	private static File defaultAlarmSoundFile;
+	
+	//Objekt för at spela upp ljud
+	private volatile static AudioClip alarmSoundclip;
 	
 	//Konstruerar alarmet
 	public Alarm() {
-		compileSoundFiles();	
+		compileSoundFiles();
 	}
 	
 	//Konstruerar alarmet och sätter alarmtiden
@@ -50,52 +40,88 @@ public class Alarm {
 	}
 	
 	//lägger till valbara ljud till listan
-		private void compileSoundFiles() {
-			File alarmDrum = new File("src/main/resources/Soundfiles/Alien_AlarmDrum-KevanGC-893953959.wav");
-			File alert = new File("src/main/resources/Soundfiles/sms-alert-5-daniel_simon.wav.wav");
-			File buzzer = new File("src/main/resources/Soundfiles/Loud_Alarm_Clock_Buzzer-Muk1984-493547174.wav");
-			soundFiles.add(alarmDrum); 
-			soundFiles.add(alert);
-			soundFiles.add(buzzer);
-			//Default ljudinställning
-			defaultAlarmSoundFile = soundFiles.get(0);	
-			}
-		
-		//Ändra vald ljudfil. 
-		public void changeDefaultSoundFile(int soundFileIndex) {
-		defaultAlarmSoundFile = soundFiles.get(soundFileIndex);
-		}
-		
-	//jämför om alarmtiden är samma tidpunkt som ett annnat kalenderobjekt
-	public boolean isEqualTo(Calendar compare) {
-		
-		String inputString = dateFormater.format(compare.getTime());
-		String alarmString = dateFormater.format(alarmTime.getTime());
-		
-		if (inputString.equals(alarmString)) {
-			return true;
-		} else {
-			return false;
-		}
-		
+	private void compileSoundFiles() {
+		File alarmDrum = new File("src/main/resources/Soundfiles/Alien_AlarmDrum-KevanGC-893953959.wav");
+		File alert = new File("src/main/resources/Soundfiles/sms-alert-5-daniel_simon.wav");
+		File buzzer = new File("src/main/resources/Soundfiles/Loud_Alarm_Clock_Buzzer-Muk1984-493547174.wav");
+		soundFiles.add(alarmDrum);
+		soundFiles.add(alert);
+		soundFiles.add(buzzer);
+		//Default ljudinställning
+		defaultAlarmSoundFile = soundFiles.get(0);
 	}
 	
+	public void snoozeAlarm() {
+		if (alarmSoundIsRunning) {
+			alarmSoundclip.stop();
+			alarmSoundIsRunning = false;
+			CompactMode.BackgroundAlarmOn.setVisible(false);
+			}
+	//skapar nytt tidsobjekt med aktuell tid när snoozeknappen trycks
+	Calendar currentTime = new GregorianCalendar(); 
+	//Lägger till det antal minuter som användaren valt att snooza
+	currentTime.add(Calendar.MINUTE,snoozeTimeMinutes );
+	//sätter nytt alarm med den valda tiden
+	alarmTime = currentTime; 
+	}
 	
+	public void turnOffAlarm() {
+		if (alarmSoundIsRunning) {
+			alarmSoundclip.stop();
+			alarmSoundIsRunning = false;
+			CompactMode.BackgroundAlarmOn.setVisible(false);
+			
+			//alarmet är avstängt
+			this.setAlarmIsSetOn(false);
+			}
+	}
 	
-	public void triggerAlarm() {
+
+	public synchronized static void loopAlarmSoundFile() {
+		if (!alarmSoundIsRunning) {
+			try {
+				//skapa nytt ljudklipp 
+				alarmSoundclip = Applet.newAudioClip(new File(defaultAlarmSoundFile.toString()).toURI().toURL());
+			} catch (MalformedURLException e) {
+				e.printStackTrace();
+			}
+			alarmSoundclip.loop();
+			alarmSoundIsRunning = true;
+		}
+	}
+	
+	//jämför om alarmtiden är samma tidpunkt som ett annnat kalenderobjekt
+	public static boolean alarmTimeIsEqual(Object obj) {
+		
+		boolean returnValue = false;
+		
+		if (obj instanceof GregorianCalendar) {
+			GregorianCalendar compare = (GregorianCalendar) obj;
+			String inputString = dateFormater.format(compare.getTime());
+			String alarmString = dateFormater.format(alarmTime.getTime());
+			if (inputString.equals(alarmString)) {
+				returnValue = true;
+			}
+			
+		}
+		
+		return returnValue;
+	}
+	
+	public static void triggerAlarm() {
 		new Thread() {
 			public void run() {
-				try {
-					soundFileInputStream = new FileInputStream(defaultAlarmSoundFile);
-					audioStream = new AudioStream(soundFileInputStream);
-					alarmSoundPlayer.player.start(audioStream);
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-				} catch (Exception e) {
+				CompactMode.BackgroundAlarmOn.setVisible(true);
+				if (!alarmSoundIsRunning) {
+					loopAlarmSoundFile();
 				}
 			}
 		}.start();
-		
+	}
+	
+	//	Ändra vald ljudfil. 
+	void changeDefaultSoundFile(int soundFileIndex) {
+		defaultAlarmSoundFile = soundFiles.get(soundFileIndex);
 	}
 	
 	public String getAlarmTime() {
@@ -107,14 +133,34 @@ public class Alarm {
 		alarmTime = new GregorianCalendar(year, month, date, hour, minute, 0);
 		//0=jan, 1=feb , osv
 	}
-
-	public boolean alarmIsOn() {
-		return alarmOn;
-	}
-
-	public void setAlarmOn(boolean alarmOn) {
-		this.alarmOn = alarmOn;
+	
+	public static boolean getAlarmIsSetOn() {
+		return alarmIsSetOn;
 	}
 	
+	public void setAlarmIsSetOn(boolean alarmSet) {
+		this.alarmIsSetOn = alarmSet;
+	}
+	
+	public ArrayList<File> getSoundFiles() {
+		return soundFiles;
+	}
+	
+	public void setSnoozeIsPressed(boolean isPressed) {
+		snoozeIsPressed = isPressed;
+	}
+	
+	public boolean isAlarmSoundRunning() {
+		return alarmSoundIsRunning;
+	}
+	
+	public void setAlarmSoundIsRunning(boolean alarmSoundIsRunning) {
+		this.alarmSoundIsRunning = alarmSoundIsRunning;
+	}
+	
+	public void setSnoozeTimeInMinutes(int minutes) {
+		snoozeTimeMinutes = minutes; 
+	}
+
 	
 }
