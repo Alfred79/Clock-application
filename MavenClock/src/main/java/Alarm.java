@@ -12,20 +12,20 @@ import java.net.MalformedURLException;
 public class Alarm {
 	
 	//denna alarmtid ska sättas av användaren
-	private Calendar alarmTime;
-	private boolean alarmIsSetOn;
-	private volatile boolean alarmSoundIsRunning = false;
+	private static Calendar alarmTime;
+	private static boolean alarmIsSetOn;
+	private volatile static boolean alarmSoundIsRunning = false;
 	//formaterar alarmtiden till enhetlig output som string
-	private DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static DateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	
 	private boolean snoozeIsPressed;
 	private int snoozeTimeMinutes = 1;
 	
 	private ArrayList<File> soundFiles = new ArrayList<File>();
-	private File defaultAlarmSoundFile;
+	private static File defaultAlarmSoundFile;
 	
 	//Objekt för at spela upp ljud
-	private volatile AudioClip alarmSoundclip;
+	private volatile static AudioClip alarmSoundclip;
 	
 	//Konstruerar alarmet
 	public Alarm() {
@@ -54,7 +54,7 @@ public class Alarm {
 		if (alarmSoundIsRunning) {
 			alarmSoundclip.stop();
 			alarmSoundIsRunning = false;
-			CompactMode.BackgroundAlarmOn.setVisible(false);
+			ClockWindow.BackgroundAlarmOn.setVisible(false);
 			}
 	//skapar nytt tidsobjekt med aktuell tid när snoozeknappen trycks
 	Calendar currentTime = new GregorianCalendar(); 
@@ -68,7 +68,7 @@ public class Alarm {
 		if (alarmSoundIsRunning) {
 			alarmSoundclip.stop();
 			alarmSoundIsRunning = false;
-			CompactMode.BackgroundAlarmOn.setVisible(false);
+			ClockWindow.BackgroundAlarmOn.setVisible(false);
 			
 			//alarmet är avstängt
 			this.setAlarmIsSetOn(false);
@@ -76,7 +76,7 @@ public class Alarm {
 	}
 	
 
-	public synchronized void loopAlarmSoundFile() {
+	public synchronized static void loopAlarmSoundFile() {
 		if (!alarmSoundIsRunning) {
 			try {
 				//skapa nytt ljudklipp 
@@ -90,7 +90,7 @@ public class Alarm {
 	}
 	
 	//jämför om alarmtiden är samma tidpunkt som ett annnat kalenderobjekt
-	public boolean alarmTimeIsEqual(Object obj) {
+	public static boolean alarmTimeIsEqual(Object obj) {
 		
 		boolean returnValue = false;
 		
@@ -107,10 +107,10 @@ public class Alarm {
 		return returnValue;
 	}
 	
-	public void triggerAlarm() {
+	public static void triggerAlarm() {
 		new Thread() {
 			public void run() {
-				CompactMode.BackgroundAlarmOn.setVisible(true);
+				ClockWindow.BackgroundAlarmOn.setVisible(true);
 				if (!alarmSoundIsRunning) {
 					loopAlarmSoundFile();
 				}
@@ -133,7 +133,7 @@ public class Alarm {
 		//0=jan, 1=feb , osv
 	}
 	
-	public boolean getAlarmIsSetOn() {
+	public static boolean getAlarmIsSetOn() {
 		return alarmIsSetOn;
 	}
 	

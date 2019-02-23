@@ -2,6 +2,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+
 import java.awt.Color;
 import javax.swing.JTextPane;
 import java.awt.Font;
@@ -42,9 +44,26 @@ public class ClockWindow extends JFrame {
 	private JButton btnSnooze;
 	private static JLabel lblAlarmOn;
 	private JLabel lblNewLabel;
-	private static ImageIcon BackgroundMain;
 	
-	CompactMode frame_Compact;
+	
+	static JLabel BackgroundAlarmOn; 
+	private static JLabel BackgroundImage;
+	private static JLabel BackgroundImgCompact;
+	private static JLabel BackgroundAlarmSet;
+	ImageIcon BackgroundMain;
+	ImageIcon BackgroundMain_2;
+	ImageIcon BackgroundAlarmSetIcon;
+	ImageIcon BackgroundAlarmOnIcon;
+	
+	JCheckBox alarmTickBox;
+	JComboBox<String> dropDownSnoozeMinutes;
+	JButton btnCompactMode;
+	JButton btnOnOff;
+	JLabel lblSetMin;
+	
+	
+	
+	JButton btnLargeMode;
 	
 	//Konstruera klockfönstret
 	public ClockWindow() {
@@ -155,6 +174,100 @@ private void increaseAvailibleYearsInMenu() {
 		}
 	}
 
+
+// Ändrar GUI efter Compact Mode
+private void initComponentsCompact() {
+	
+	setSize(300, 172);
+	alarmTickBox.setVisible(false);
+	alarmTickBox.setBounds(194, 73, 28, 28);
+	if (alarmTickBox.isSelected()) {BackgroundImgCompact.setVisible(false); btnOnOff.setText("On");}
+	else if (!alarmTickBox.isSelected()) {BackgroundImgCompact.setVisible(true); btnOnOff.setText("Off");}
+	BackgroundImage.setVisible(false);
+	btnOnOff.setVisible(true); 
+	btnSnooze.setVisible(true);
+	btnCompactMode.setVisible(false);
+	dropDownSnoozeMinutes.setBounds(245, 33, 50, 18);
+	btnLargeMode.setVisible(true);
+	
+	timeDisplayText.setBounds(12, 11, 97, 18);
+	timeDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 18));
+	
+	dateDisplayText.setBounds(15, 32, 66, 13);
+	dateDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 8));
+	
+	alarmDisplayPanel.setBounds(10, 57, 95, 41);
+	alarmDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 10));
+	
+	dropDownYears.setFont(new Font("Lucida Grande", Font.PLAIN, 6));
+	dropDownYears.setBounds(8, 125, 70, 17);
+	
+	dropDownMonths.setFont(new Font("Lucida Grande", Font.PLAIN, 6));
+	dropDownMonths.setBounds(73, 125, 60, 17);
+
+	dropDownDays.setFont(new Font("Lucida Grande", Font.PLAIN, 6));
+	dropDownDays.setBounds(128, 125, 60, 17);
+	
+	dropDownHours.setFont(new Font("Lucida Grande", Font.PLAIN, 6));
+	dropDownHours.setBounds(184, 125, 60, 17);
+	
+	dropDownMinutes.setFont(new Font("Lucida Grande", Font.PLAIN, 6));
+	dropDownMinutes.setBounds(237, 125, 60, 17);	
+		
+	lblSetMin = new JLabel("Set min");
+	lblSetMin.setVisible(true);
+	lblSetMin.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
+	lblSetMin.setBounds(210, 33, 36, 16);
+	timeDisplayPanel.add(lblSetMin);
+	
+	
+	
+
+}
+
+//Ändrar GUI från Compact Mode tillbaka till Large Mode
+private void initComponentsLarge() {
+	
+	setSize(700, 1000);
+	alarmTickBox.setVisible(true);
+	alarmTickBox.setBounds(523, 407, 28, 28);
+	BackgroundImage.setVisible(true);
+	btnOnOff.setVisible(false); 
+	btnSnooze.setVisible(false);
+	btnCompactMode.setVisible(true);
+	dropDownSnoozeMinutes.setBounds(327, 753, 55, 17);
+	btnLargeMode.setVisible(false);
+	
+	timeDisplayText.setBounds(224, 170, 245, 120);
+	timeDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 60));
+	
+	dateDisplayText.setBounds(259, 290, 178, 55);
+	dateDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 25));
+	
+	alarmDisplayPanel.setBounds(220, 590, 268, 39);
+	alarmDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 25));
+	
+	dropDownYears.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+	dropDownYears.setBounds(173, 527, 75, 17);
+	
+	dropDownMonths.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+	dropDownMonths.setBounds(257, 527, 52, 17);
+
+	dropDownDays.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+	dropDownDays.setBounds(321, 527, 52, 17);
+	
+	dropDownHours.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+	dropDownHours.setBounds(399, 527, 52, 17);
+	
+	dropDownMinutes.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
+	dropDownMinutes.setBounds(461, 527, 52, 17);
+		
+	lblSetMin.setVisible(false);
+	
+
+}
+
+
 		//skapar och sätter inställningar för grafiska objekt till fönstret
 		private void initComponents() {
 			currentTimeObject = new GregorianCalendar();
@@ -190,6 +303,7 @@ private void increaseAvailibleYearsInMenu() {
 			alarmDisplayPanel.setBounds(220, 590, 268, 39);
 			alarmDisplayPanel.setBackground(Color.WHITE);
 			alarmDisplayPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
+			
 			dropDownYears = new JComboBox<String>();
 			dropDownYears.setBounds(173, 527, 75, 17);
 			timeDisplayPanel.add(dropDownYears);
@@ -263,12 +377,6 @@ private void increaseAvailibleYearsInMenu() {
 			dropDownHours.getEditor().getEditorComponent().setBackground(Color.WHITE);
 			timeDisplayPanel.add(dropDownHours);
 			
-			// Alarmrubrik
-			JLabel lblAlarm = new JLabel("");
-			lblAlarm.setFont(new Font("Tahoma", Font.BOLD, 25));
-			lblAlarm.setBounds(33, 98, 75, 34);
-			timeDisplayPanel.add(lblAlarm);
-			
 			// Rubrik hh/mm
 						JLabel lblDate = new JLabel("Year     Month.    Day");
 						lblDate.setSize(191, 16);
@@ -289,7 +397,7 @@ private void increaseAvailibleYearsInMenu() {
 				dropDownMinutes.setMaximumRowCount(12);
 				
 				
-				JCheckBox alarmTickBox = new JCheckBox("");
+				alarmTickBox = new JCheckBox("");
 				alarmTickBox.setVisible(true);
 				alarmTickBox.setFont(new Font("Lucida Grande", Font.BOLD, 16));
 				alarmTickBox.setBounds(523, 407, 28, 28);
@@ -314,7 +422,7 @@ private void increaseAvailibleYearsInMenu() {
 				
 				timeDisplayPanel.add(btnSnooze);
 				
-				JComboBox<String> dropDownSnoozeMinutes = new JComboBox<String>();
+				dropDownSnoozeMinutes = new JComboBox<String>();
 				dropDownSnoozeMinutes.setBounds(327, 753, 55, 17);
 				dropDownSnoozeMinutes.setEditable(true);
 				dropDownSnoozeMinutes.getEditor().getEditorComponent().setBackground(Color.WHITE);
@@ -340,22 +448,106 @@ private void increaseAvailibleYearsInMenu() {
 				
 				
 				
-				JButton btnCompactMode = new JButton("Compact Mode");
+				btnCompactMode = new JButton("Compact Mode");
 				btnCompactMode.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						frame_Compact = new CompactMode();
+						initComponentsCompact();
 					}
 				});
 				btnCompactMode.setBounds(19, 0, 127, 29);
 				timeDisplayPanel.add(btnCompactMode);
 				
-				JLabel BackgroundImage = new JLabel("");
+				btnSnooze = new JButton("Snooze");
+				btnSnooze.setVisible(false);
+				btnSnooze.setBounds(211, 5, 86, 24);
+				btnSnooze.setBorder(new LineBorder(Color.BLACK));
+				btnSnooze.setFont(new Font("Lucida Grande", Font.PLAIN, 17));
+				btnSnooze.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						alarm.snoozeAlarm();
+				}
+					
+				});
+				timeDisplayPanel.add(btnSnooze);
+				
+				btnOnOff = new JButton("Off");
+				btnOnOff.setVisible(false);
+				btnOnOff.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if (!alarmTickBox.isSelected()) {
+				        	int alarmYear = Integer.parseInt(dropDownYears.getSelectedItem().toString());
+				        	int alarmMonth = getMonthNumber(dropDownMonths.getSelectedItem().toString());
+				        	int alarmDay = Integer.parseInt(dropDownDays.getSelectedItem().toString());
+							int alarmHour = Integer.parseInt(dropDownHours.getSelectedItem().toString());
+							int alarmMinute = Integer.parseInt(dropDownMinutes.getSelectedItem().toString());
+							alarm.setAlarmTime(alarmYear, alarmMonth, alarmDay, alarmHour, alarmMinute);
+							alarm.setAlarmIsSetOn(true);
+							updateAlarmDisplayText();
+							alarmTickBox.setSelected(true);
+							btnOnOff.setText("On");
+							BackgroundImgCompact.setVisible(false);
+							
+							
+							
+							
+				        } 
+				        else if (alarmTickBox.isSelected()){
+				        	alarm.setAlarmIsSetOn(false);
+							updateAlarmDisplayText(); 
+							alarm.turnOfAlarm();
+							alarmTickBox.setSelected(false);
+							btnOnOff.setText("Off");
+							btnOnOff.setBackground(Color.WHITE);
+							BackgroundImgCompact.setVisible(true);
+					}}
+				});
+				btnOnOff.setFont(new Font("Lucida Grande", Font.PLAIN, 40));
+				btnOnOff.setBounds(114, 13, 79, 91);
+				btnOnOff.setBorder(new LineBorder(Color.BLACK));
+				timeDisplayPanel.add(btnOnOff);
+				
+				btnLargeMode = new JButton("X");
+				btnLargeMode.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						initComponentsLarge();
+					}
+				});
+				btnLargeMode.setBounds(0, 0, 20, 20);
+				btnLargeMode.setVisible(false);
+				timeDisplayPanel.add(btnLargeMode);
+				
+				// Väljer Bakgrundsbilder beroende på status och Mode
+				BackgroundImage = new JLabel("");
 				BackgroundMain = new ImageIcon("src/main/resources/img/BackgroundMain.jpg");
 				BackgroundImage.setBounds(0, 0, 700, 1000);
 				BackgroundImage.setIcon(BackgroundMain);
 				timeDisplayPanel.add(BackgroundImage);
 				
-			
+				BackgroundImgCompact = new JLabel("");
+				BackgroundMain_2 = new ImageIcon("src/main/resources/img/CompactMode_5.jpg","BackgroundMain_2");
+				BackgroundImgCompact.setBounds(0, 0, 300, 150);
+				BackgroundImgCompact.setIcon(BackgroundMain_2);
+				timeDisplayPanel.add(BackgroundImgCompact);
+				
+				BackgroundAlarmOn = new JLabel("");
+				BackgroundAlarmOnIcon = new ImageIcon("src/main/resources/img/CompactMode_On.jpg","BackgroundAlarmOnIcon" );
+				BackgroundAlarmOn.setBounds(0, 0, 300, 150);
+				BackgroundAlarmOn.setVisible(false);
+				BackgroundAlarmOn.setIcon(BackgroundAlarmOnIcon);
+				timeDisplayPanel.add(BackgroundAlarmOn);
+				
+				BackgroundAlarmSet = new JLabel("");
+				BackgroundAlarmSetIcon= new ImageIcon("src/main/resources/img/CompactMode_AlarmSet.jpg","BackgroundAlarmSetIcon" );
+				BackgroundAlarmSet.setBounds(0, 0, 300, 150);
+				BackgroundAlarmSet.setIcon(BackgroundAlarmSetIcon);
+				timeDisplayPanel.add(BackgroundAlarmSet);
+				
+				
+				
+				
 				
 				
 				
