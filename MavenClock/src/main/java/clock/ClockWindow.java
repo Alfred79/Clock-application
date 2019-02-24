@@ -45,7 +45,8 @@ public class ClockWindow extends JFrame {
 	private int count = 0;
 
 	
-
+	int h;
+	int w;
 	private JPanel timeDisplayPanel;
 	private JPanel alarmDisplayPanel;
 	
@@ -90,7 +91,9 @@ public class ClockWindow extends JFrame {
 
 	
 	//Konstruera klockfönstret
-	public ClockWindow() {
+	public ClockWindow(int h, int w) {
+		this.h = h;
+		this.w = w;
 		initComponents();
 		setInitialAlarmMenus(currentTimeObject);
 		displayTime();
@@ -199,9 +202,9 @@ private void increaseAvailibleYearsInMenu() {
 	}
 
 // Ändrar GUI efter Compact Mode
-private void initComponentsCompact() {
+private void initComponentsCompact(int h, int w) {
 	
-	setSize(301, 174);
+	setSize(h, w);
 	alarmTickBox.setVisible(false);
 	alarmTickBox.setBounds(194, 73, 28, 28);
 	if (alarmTickBox.isSelected()) {BackgroundImgCompact.setVisible(false); btnOnOff.setText("On");}
@@ -533,7 +536,7 @@ private void initComponentsLarge() {
 				btnCompactMode.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 				btnCompactMode.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
-						initComponentsCompact();
+						initComponentsCompact(h, w);
 					}
 				});
 				btnCompactMode.setBounds(19, 30, 98, 29);
