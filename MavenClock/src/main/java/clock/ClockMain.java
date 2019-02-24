@@ -2,27 +2,33 @@
 package clock;
 
 import java.awt.EventQueue;
+import java.io.ObjectStreamClass;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.zip.ZipEntry;
 
 public class ClockMain {
 	
 	
+	static String OS;
+	static int h;
+	static int w;
 	public static void main(String[] args) throws InterruptedException {
 
-//		Calendar cal = new GregorianCalendar(2019,9,12,15,50,00);
-//		
-//		System.out.println(cal.getTime());
-//		cal.add(Calendar.SECOND, 60);
-//		System.out.println(cal.getTime());
+
 		
 		
+		OS = System.getProperty("os.name");
 		
+		if (OS.equalsIgnoreCase("Mac OS X")) {h=300; w=172;}
+		else if (OS.equalsIgnoreCase("Windows 10")) {h=305; w=179;}
+		else {h=305; w=179;}
 		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ClockWindow frame = new ClockWindow();
+					System.out.println(OS + h + " " + w);
+					ClockWindow frame = new ClockWindow(h, w);
 					frame.setResizable(false);
 
 					} catch (Exception e) {
