@@ -23,6 +23,7 @@ public class ClockMain {
 			public void run() {
 				try {
 					ClockWindow frame = new ClockWindow();
+					frame.setResizable(false);
 
 					} catch (Exception e) {
 					e.printStackTrace();

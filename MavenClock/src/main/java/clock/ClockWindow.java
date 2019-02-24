@@ -201,7 +201,7 @@ private void increaseAvailibleYearsInMenu() {
 // Ändrar GUI efter Compact Mode
 private void initComponentsCompact() {
 	
-	setSize(300, 172);
+	setSize(300, 175);
 	alarmTickBox.setVisible(false);
 	alarmTickBox.setBounds(194, 73, 28, 28);
 	if (alarmTickBox.isSelected()) {BackgroundImgCompact.setVisible(false); btnOnOff.setText("On");}
@@ -308,12 +308,15 @@ private void initComponentsLarge() {
 		private void initComponents() {
 			currentTimeObject = new GregorianCalendar();
 			setSize(700, 1000);
+			
 			timeDisplayPanel = new JPanel();
 			timeDisplayPanel.setBackground(Color.WHITE);
 			timeDisplayPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 			setContentPane(timeDisplayPanel);
 			
 			timeDisplayPanel.setLayout(null);
+			
+			
 			timeDisplayText = new JTextPane();
 			timeDisplayText.setBounds(224, 170, 245, 120);
 			timeDisplayText.setFont(new Font("Tahoma", Font.PLAIN, 60));
@@ -533,7 +536,7 @@ private void initComponentsLarge() {
 						initComponentsCompact();
 					}
 				});
-				btnCompactMode.setBounds(-13, 30, 98, 29);
+				btnCompactMode.setBounds(19, 30, 98, 29);
 				timeDisplayPanel.add(btnCompactMode);
 				
 				btnSnooze = new JButton("Snooze");
