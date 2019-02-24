@@ -201,7 +201,7 @@ private void increaseAvailibleYearsInMenu() {
 // Ändrar GUI efter Compact Mode
 private void initComponentsCompact() {
 	
-	setSize(300, 175);
+	setSize(301, 174);
 	alarmTickBox.setVisible(false);
 	alarmTickBox.setBounds(194, 73, 28, 28);
 	if (alarmTickBox.isSelected()) {BackgroundImgCompact.setVisible(false); btnOnOff.setText("On");}
@@ -229,19 +229,19 @@ private void initComponentsCompact() {
 	alarmDate.setFont(new Font("Lucida Grande", Font.PLAIN, 8));
 	
 	dropDownYears.setFont(new Font("Lucida Grande", Font.PLAIN, 6));
-	dropDownYears.setBounds(8, 125, 70, 17);
+	dropDownYears.setBounds(8, 120, 70, 17);
 	
 	dropDownMonths.setFont(new Font("Lucida Grande", Font.PLAIN, 6));
-	dropDownMonths.setBounds(73, 125, 60, 17);
+	dropDownMonths.setBounds(73, 120, 60, 17);
 
 	dropDownDays.setFont(new Font("Lucida Grande", Font.PLAIN, 6));
-	dropDownDays.setBounds(128, 125, 60, 17);
+	dropDownDays.setBounds(128, 120, 60, 17);
 	
 	dropDownHours.setFont(new Font("Lucida Grande", Font.PLAIN, 6));
-	dropDownHours.setBounds(184, 125, 60, 17);
+	dropDownHours.setBounds(184, 120, 60, 17);
 	
 	dropDownMinutes.setFont(new Font("Lucida Grande", Font.PLAIN, 6));
-	dropDownMinutes.setBounds(237, 125, 60, 17);	
+	dropDownMinutes.setBounds(237, 120, 60, 17);	
 		
 	lblSetMin = new JLabel("Set min");
 	lblSetMin.setVisible(true);
