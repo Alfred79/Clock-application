@@ -2,10 +2,6 @@
 package clock;
 
 import java.awt.EventQueue;
-import java.io.ObjectStreamClass;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.zip.ZipEntry;
 
 public class ClockMain {
 	
@@ -27,7 +23,7 @@ public class ClockMain {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					System.out.println(OS + h + " " + w);
+					//System.out.println(OS + h + " " + w);
 					ClockWindow frame = new ClockWindow(h, w);
 					frame.setResizable(false);
 

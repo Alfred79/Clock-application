@@ -16,18 +16,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPanel;
-import javax.swing.JTextPane;
-import javax.swing.border.EmptyBorder;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JComboBox;
-import javax.swing.JCheckBox;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
@@ -85,6 +76,7 @@ public class ClockWindow extends JFrame {
 	static Alarm alarm = new Alarm();
 	JMenu menuTimeZone;
 	JMenu menuAlarmSound;
+	JMenu submenu;
 	JMenuBar mb;
 	JButton btnLargeMode;
 	private JTextField AlarmDate;
@@ -344,17 +336,19 @@ private void initComponentsLarge() {
 	        mb.setBounds(0, 0, 682, 22);
 	        
 	        menuTimeZone = new JMenu();
-	        menuAlarmSound = new JMenu("Alarm Sounds");
+	        menuAlarmSound = new JMenu("Settings");
 	        JMenuItem sound1, sound2, sound3;
+	        submenu = new JMenu("Alarm-sounds");
 	        sound1 = new JMenuItem("Sound 1");
 	        sound2 = new JMenuItem("Sound 2");
 	        sound3 = new JMenuItem("Sound 3");
 	        sound1.addActionListener(new SetSound(0));
 	        sound2.addActionListener(new SetSound(1));
 	        sound3.addActionListener(new SetSound(2));
-	        menuAlarmSound.add(sound1);
-	        menuAlarmSound.add(sound2);
-	        menuAlarmSound.add(sound3);
+	        menuAlarmSound.add(submenu);
+	        submenu.add(sound1);
+	        submenu.add(sound2);
+	        submenu.add(sound3);
 	        menuTimeZone = new JMenu("Timezone");
 	        JMenuItem menuItem1, menuItem2, menuItem3;
 	        menuItem1 = new JMenuItem("Tidzon1");
@@ -363,7 +357,9 @@ private void initComponentsLarge() {
 	        menuTimeZone.add(menuItem1);
 	        menuTimeZone.add(menuItem2);
 	        menuTimeZone.add(menuItem3);
-	        mb.add(menuTimeZone);
+	        menuAlarmSound.add(menuTimeZone);
+
+	        //mb.add(menuTimeZone);
 	        mb.add(menuAlarmSound);
 	        timeDisplayPanel.add(mb);
 	        
