@@ -718,7 +718,7 @@ private void initComponentsLarge() {
 					
 					//kickar igång alarmet om alarmet är på och tiden är lika med aktuell tidpunkt
 
-					if (alarm.isAlarmSoundRunning() && alarm.alarmTimeIsEqual(currentTimeObject)) {
+					if (alarm.alarm.getAlarmIsSetOn() && alarm.alarmTimeIsEqual(currentTimeObject)) {
 
 
 						alarm.triggerAlarm();
