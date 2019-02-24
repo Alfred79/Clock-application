@@ -77,6 +77,7 @@ public class ClockWindow extends JFrame {
 	JMenu menuTimeZone;
 	JMenu menuAlarmSound;
 	JMenu submenu;
+	JMenu view;
 	JMenuBar mb;
 	JButton btnLargeMode;
 	private JTextField AlarmDate;
@@ -337,7 +338,7 @@ private void initComponentsLarge() {
 	        
 	        menuTimeZone = new JMenu();
 	        menuAlarmSound = new JMenu("Settings");
-	        JMenuItem sound1, sound2, sound3;
+	        JMenuItem sound1, sound2, sound3, compact, large;
 	        submenu = new JMenu("Alarm-sounds");
 	        sound1 = new JMenuItem("Sound 1");
 	        sound2 = new JMenuItem("Sound 2");
@@ -358,6 +359,23 @@ private void initComponentsLarge() {
 	        menuTimeZone.add(menuItem2);
 	        menuTimeZone.add(menuItem3);
 	        menuAlarmSound.add(menuTimeZone);
+	        compact = new JMenuItem("Compact View");
+	        compact.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					initComponentsCompact(h, w);
+				}
+			});
+	        large = new JMenuItem("Large View");
+	        large.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					initComponentsLarge();
+				}
+			});
+	        view = new JMenu("View");
+	        
+	        view.add(compact);
+	        view.add(large);
+	        menuAlarmSound.add(view);
 
 	        //mb.add(menuTimeZone);
 	        mb.add(menuAlarmSound);
