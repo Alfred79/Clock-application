@@ -544,16 +544,15 @@ private void initComponentsLarge() {
 				
 				timeDisplayPanel.add(dropDownSnoozeMinutes);
 				
-				
-				
-				btnCompactMode = new JButton("Compact Mode");
+				// Knapp som ändrar vyn till liten
+				btnCompactMode = new JButton("");
 				btnCompactMode.setFont(new Font("Lucida Grande", Font.PLAIN, 10));
 				btnCompactMode.addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent e) {
 						initComponentsCompact(h, w);
 					}
 				});
-				btnCompactMode.setBounds(19, 30, 98, 29);
+				btnCompactMode.setBounds(19, 30, 0, 0);
 				timeDisplayPanel.add(btnCompactMode);
 				
 				btnSnooze = new JButton("Snooze");
@@ -570,6 +569,8 @@ private void initComponentsLarge() {
 					
 				});
 				timeDisplayPanel.add(btnSnooze);
+				
+				//Knapp i Compact View som slår på och av alarmet
 				
 				btnOnOff = new JButton("Off");
 				btnOnOff.setVisible(false);
@@ -669,7 +670,7 @@ private void initComponentsLarge() {
 				
 				
 				
-				
+				// Metod som lyssnar på "alarmknappen" i stora vyn , dvs on/off 
 				
 				
 				alarmTickBox.addActionListener(new ActionListener() {
@@ -757,6 +758,7 @@ private void initComponentsLarge() {
 		}.start();
 	}
 	
+	// Metod som visar datum
 	public void showDate(String time) {
 		dateDisplayText.setText(time);
 	}
@@ -786,7 +788,7 @@ private void initComponentsLarge() {
 
 	
 	
-		//visar alarmtid om alarmet är på annars "alarm off"
+		//visar alarmtid om alarmet är på 
 		private void updateAlarmDisplayText() {
 		if (alarm.getAlarmIsSetOn()==true) {
 			String alarmTimeString= alarm.getAlarmTime();
@@ -795,6 +797,7 @@ private void initComponentsLarge() {
 		}	
 		}
 		
+		//visar alarmdatum om alarmet är på annars "alarm off"
 		private void updateAlarmDateDisplayText() {
 			if (alarm.getAlarmIsSetOn()==true) {
 				String alarmTimeString= alarm.getAlarmTime();
@@ -827,7 +830,6 @@ private void initComponentsLarge() {
 			 alarm.changeDefaultSoundFile(number);
 		 }
 }
-
 
 
 

@@ -13,9 +13,9 @@ public class ClockMain {
 
 
 		
-		
+		// Undersöker vilket operativsystem som körs
 		OS = System.getProperty("os.name");
-		
+		// Dimensionsvariabler till den lilla vyn för att matcha skillnader i OS
 		if (OS.equalsIgnoreCase("Mac OS X")) {h=300; w=172;}
 		else if (OS.equalsIgnoreCase("Windows 10")) {h=305; w=179;}
 		else {h=305; w=179;}
@@ -23,7 +23,7 @@ public class ClockMain {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					//System.out.println(OS + h + " " + w);
+					
 					ClockWindow frame = new ClockWindow(h, w);
 					frame.setResizable(false);
 
@@ -34,4 +34,3 @@ public class ClockMain {
 		});
 	}
 }
-
